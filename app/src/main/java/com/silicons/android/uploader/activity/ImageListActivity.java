@@ -3,6 +3,7 @@ package com.silicons.android.uploader.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -19,12 +20,24 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.googlecode.flickrjandroid.Flickr;
+import com.googlecode.flickrjandroid.FlickrException;
+import com.googlecode.flickrjandroid.oauth.OAuthToken;
+import com.googlecode.flickrjandroid.test.TestInterface;
 import com.silicons.android.uploader.R;
+import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.utils.DialogUtils;
 import com.silicons.android.uploader.utils.FileUtils;
 
+import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
 
 import static com.silicons.android.uploader.config.AppConstant.*;
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
@@ -50,6 +63,8 @@ public class ImageListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_list);
+
+        Log.e("hqthao", "fucking");
 
         // set toolbar option
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -184,4 +199,5 @@ public class ImageListActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

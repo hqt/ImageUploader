@@ -20,64 +20,25 @@ public class PrefStore {
     public static final String PREF_IS_FIRST_RUN = "is_first_run";
 
     /**
-     * Preference key containing currently latest version on system
+     * preference key that store flick token of flickr
      */
-    public static final String PREF_LATEST_VERSION = "latest_database_version";
+    public static final String PREF_FLICKR_TOKEN = "pref_flick_token";
 
     /**
-     * Preference key containing currently latest date on system
+     * preference key that store flick token of flickr
      */
-    public static final String PREF_LATEST_UPDATE_DATE = "latest_update_date";
+    public static final String PREF_FLICKR_SECRET = "pref_flick_secret";
 
     /**
-     * Preference key contain is 3g or not
+     * preference key that store flick token of flickr
      */
-    public static final String PREF_IS_MOBILE_NETWORK = "is_mobile_network";
+    public static final String PREF_FLICKR_USER_ID = "pref_flick_user_id";
 
     /**
-     * Preference key for bus server ip
+     * preference key that store flick token of flickr
      */
-    public static final String PREF_BUS_SERVER_IP = "bus_server_ip_address";
+    public static final String PREF_FLICKR_USER_NAME= "pref_flick_user_name";
 
-    /**
-     * Preference key for bus server port
-     */
-    public static final String PREF_BUS_SERVER_PORT = "bus_server_port";
-
-    /**
-     * Preference key for simulation speed
-     */
-    public static final String PREF_SIMULATION_SPEED = "simulation_speed";
-
-    /**
-     * Preference key for map download option
-     */
-    public static final String PREF_IS_MAP_DOWNLOADED = "is_map_downloaded";
-
-    /**
-     * Preference key for bus notify distance
-     */
-    public static final String PREF_BUS_NOTIFY_DISTANCE = "bus_notify_distance";
-
-    /**
-     * Preference key for motorbike notify distance
-     */
-    public static final String PREF_MOTOR_NOTIFY_DISTANCE = "motor_notify_distance";
-
-    /**
-     * Preference key for bus sort type
-     */
-    public static final String PREF_BUS_SORT_TYPE = "bus_sort_type";
-
-    /**
-     * Preference key for motorbike sort type
-     */
-    public static final String PREF_MOTOR_SORT_TYPE = "motor_sort_type";
-
-    /**
-     * Preference key for motorbike sort type
-     */
-    public static final String PREF_STIMULATE_ROUTE_TYPE = "stimulate_route_type";
 
     ///////////////////////////////////////////////////////////////
     /////////////////   DEFAULT VALUE   ///////////////////////////
@@ -87,64 +48,25 @@ public class PrefStore {
     public static final boolean DEFAULT_FIRST_RUN = true;
 
     /**
-     * Default value for {@link PrefStore#PREF_LATEST_VERSION}
+     * Default value for {@link PrefStore#PREF_FLICKR_TOKEN}
      */
-    public static final int DEFAULT_LATEST_VERSION = 1;
+    public static final String DEFAULT_FLICKR_TOKEN = null;
 
     /**
-     * Default value for {@link PrefStore#PREF_LATEST_UPDATE_DATE} (return empty string for multi-language concept)
+     * Default value for {@link PrefStore#PREF_FLICKR_SECRET}
      */
-    public static final String DEFAULT_PREF_LATEST_UPDATE_DATE = "";
+    public static final String DEFAULT_FLICKR_SECRET = null;
 
     /**
-     * Default value for {@link PrefStore#PREF_IS_MOBILE_NETWORK}
+     * Default value for {@link PrefStore#PREF_FLICKR_USER_ID}
      */
-    public static final boolean DEFAULT_AUTO_MOBILE_NETWORK = true;
+    public static final String DEFAULT_FLICKR_USER_ID = null;
 
     /**
-     * Default value for {@link PrefStore#PREF_BUS_SERVER_IP}
+     * Default value for {@link PrefStore#PREF_FLICKR_USER_NAME}
      */
-    public static final String DEFAULT_BUS_SERVER_IP = "192.168.1.1";
+    public static final String DEFAULT_FLICKR_USER_NAME = null;
 
-    /**
-     * Default value for {@link PrefStore#PREF_BUS_SERVER_PORT}
-     */
-    public static final int DEFAULT_BUS_SERVER_PORT = 8080;
-
-    /**
-     * Default value for {@link PrefStore#PREF_SIMULATION_SPEED}
-     */
-    public static final int DEFAULT_SIMULATION_SPEED = 120;
-
-    /**
-     * Default value for {@link PrefStore#PREF_IS_MAP_DOWNLOADED}
-     */
-    public static final boolean DEFAULT_MAP_DOWNLOAD = false;
-
-    /**
-     * Default value for {@link PrefStore#PREF_BUS_NOTIFY_DISTANCE}
-     */
-    public static final int DEFAULT_BUS_NOTIFY_DISTANCE = 150;
-
-    /**
-     * Default value for {@link PrefStore#PREF_MOTOR_NOTIFY_DISTANCE}
-     */
-    public static final int DEFAULT_MOTOR_NOTIFY_DISTANCE = 150;
-
-    /**
-     * Default value for {@link PrefStore#PREF_BUS_SORT_TYPE}
-     */
-    public static final int DEFAULT_BUS_SORT_TYPE = 0;
-
-    /**
-     * Default value for {@link PrefStore#PREF_MOTOR_SORT_TYPE}
-     */
-    public static final int DEFAULT_MOTOR_SORT_TYPE = 0;
-
-    /**
-     * Default value for {@link PrefStore#PREF_STIMULATE_ROUTE_TYPE}
-     */
-    public static final int DEFAULT_STIMULATE_ROUTE_TYPE = 0;
 
     ////////////////////////////////////////////////////////////////////
     /////////////////////////////  GETTER //////////////////////////////
@@ -156,64 +78,24 @@ public class PrefStore {
         return PreferenceManager.getDefaultSharedPreferences(UploaderApplication.getAppContext());
     }
 
-    public static int getLatestVersion() {
-        return getSharedPreferences().getInt(PREF_LATEST_VERSION, DEFAULT_LATEST_VERSION);
+    public static String getFlickrToken() {
+        return getSharedPreferences().getString(PREF_FLICKR_TOKEN, DEFAULT_FLICKR_TOKEN);
     }
 
-    public static String getLastedUpdateDate() {
-        return getSharedPreferences().getString(PREF_LATEST_UPDATE_DATE, DEFAULT_PREF_LATEST_UPDATE_DATE);
+    public static String getFlickTokenSecret() {
+        return getSharedPreferences().getString(PREF_FLICKR_SECRET, DEFAULT_FLICKR_SECRET);
     }
 
-    public static boolean isMobileNetwork() {
-        return getSharedPreferences().getBoolean(PREF_IS_MOBILE_NETWORK, DEFAULT_AUTO_MOBILE_NETWORK);
+    public static String getFlickrUserId() {
+        return getSharedPreferences().getString(PREF_FLICKR_USER_ID, DEFAULT_FLICKR_USER_ID);
     }
 
-    public static String getServerIp() {
-        return getSharedPreferences().getString(PREF_BUS_SERVER_IP, DEFAULT_BUS_SERVER_IP);
+    public static String getPrefFlickrUserName() {
+        return getSharedPreferences().getString(PREF_FLICKR_USER_NAME, DEFAULT_FLICKR_USER_NAME);
     }
-
-    public static int getServerPort() {
-        return getSharedPreferences().getInt(PREF_BUS_SERVER_PORT, DEFAULT_BUS_SERVER_PORT);
-    }
-
-    public static int getSimulationSpeed() {
-        return getSharedPreferences().getInt(PREF_SIMULATION_SPEED, DEFAULT_SIMULATION_SPEED);
-    }
-
-    public static boolean getIsMapDownloaded() {
-        return getSharedPreferences().getBoolean(PREF_IS_MAP_DOWNLOADED, DEFAULT_MAP_DOWNLOAD);
-    }
-
-    public static int getBusNotifyDistance() {
-        return getSharedPreferences().getInt(PREF_BUS_NOTIFY_DISTANCE, DEFAULT_BUS_NOTIFY_DISTANCE);
-    }
-
-    public static int getMotorNotifyDistance() {
-        return getSharedPreferences().getInt(PREF_MOTOR_NOTIFY_DISTANCE, DEFAULT_MOTOR_NOTIFY_DISTANCE);
-    }
-
-
-    public static int getBusSortType() {
-        return getSharedPreferences().getInt(PREF_BUS_SORT_TYPE, DEFAULT_BUS_SORT_TYPE);
-    }
-
-    public static int getMotorSortType() {
-        return getSharedPreferences().getInt(PREF_MOTOR_SORT_TYPE, DEFAULT_MOTOR_SORT_TYPE);
-    }
-
-    public static int getSimulateRouteType() {
-        return getSharedPreferences().getInt(PREF_STIMULATE_ROUTE_TYPE, DEFAULT_STIMULATE_ROUTE_TYPE);
-    }
-
 
     ////////////////////////////////////////////////////////////////////
     /////////////////////////////  SETTER //////////////////////////////
-
-    public static void setLastestVersion(int version) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putInt(PREF_LATEST_VERSION, version);
-        editor.commit();
-    }
 
     public static void setDeployedApp() {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
@@ -221,65 +103,30 @@ public class PrefStore {
         editor.commit();
     }
 
-    public static void setCanMobileNetwork(boolean state) {
+    public static void setFlickrToken(String flickrToken) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putBoolean(PREF_IS_MOBILE_NETWORK, state);
+        editor.putString(PREF_FLICKR_TOKEN, flickrToken);
         editor.commit();
     }
 
-    public static void setBusServerIp(String ip) {
+    public static void setFlickrSecret(String flickrSecret) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putString(PREF_BUS_SERVER_IP, ip);
+        editor.putString(PREF_FLICKR_SECRET, flickrSecret);
         editor.commit();
     }
 
-    public static void setBusServerPort(int port) {
+    public static void setFlickrUserId(String flickrUserId) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putInt(PREF_BUS_SERVER_PORT, port);
+        editor.putString(PREF_FLICKR_USER_ID, flickrUserId);
         editor.commit();
     }
 
-    public static void setPrefSimulationSpeed(int speed) {
+    public static void setFlickrUserName(String flickrUserName) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putInt(PREF_SIMULATION_SPEED, speed);
+        editor.putString(PREF_FLICKR_USER_NAME, flickrUserName);
         editor.commit();
     }
 
-    public static void setIsMapDownloaded(boolean state) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putBoolean(PREF_IS_MAP_DOWNLOADED, state);
-        editor.commit();
-    }
-
-    public static void setBusNotifyDistance(int distance) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putInt(PREF_BUS_NOTIFY_DISTANCE, distance);
-        editor.commit();
-    }
-
-    public static void setMotorNotifyDistance(int distance) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putInt(PREF_MOTOR_NOTIFY_DISTANCE, distance);
-        editor.commit();
-    }
-
-    public static void setBusSortType(int type) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putInt(PREF_BUS_SORT_TYPE, type);
-        editor.commit();
-    }
-
-    public static void setMotorSortType(int type) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putInt(PREF_MOTOR_SORT_TYPE, type);
-        editor.commit();
-    }
-
-    public static void setStimulateRouteType(int type) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putInt(PREF_STIMULATE_ROUTE_TYPE, type);
-        editor.commit();
-    }
 
     //////////////////////////////////////////////////////////////////////
     ///////////////////// QUERY DATA EXIST ///////////////////////////////
