@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="189dp"
+    android:background="@drawable/wallpaper">
+
+    <!--<com.fpt.router.library.model.common.RoundedImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:id="@+id/imageView"
+        android:src="@drawable/ic_no_user"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="51dp" />-->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Flickr Uploader"
+        android:textSize="20sp"
+        android:textStyle="normal"
+        android:padding="5dp"
+        android:id="@+id/textview"
+        android:gravity="center"
+        android:layout_margin="5dp"
+        android:textColor="#fff"
+        android:layout_gravity="center_vertical"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

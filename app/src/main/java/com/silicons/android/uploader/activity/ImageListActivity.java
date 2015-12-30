@@ -6,11 +6,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.NavigationView;
 import android.support.v4.util.Pair;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -35,6 +39,8 @@ public class ImageListActivity extends AppCompatActivity {
 
     private FloatingActionButton photoUploadButton;
     private FloatingActionButton cameraUploadButton;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
 
     // store photo path from camera
@@ -55,7 +61,10 @@ public class ImageListActivity extends AppCompatActivity {
 
         photoUploadButton = (FloatingActionButton) findViewById(R.id.fab_photos);
         cameraUploadButton = (FloatingActionButton) findViewById(R.id.fab_camera);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
+        // event for selecting photo from library
         photoUploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,6 +79,7 @@ public class ImageListActivity extends AppCompatActivity {
             }
         });
 
+        // event for taking screenshot from camera
         cameraUploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +109,28 @@ public class ImageListActivity extends AppCompatActivity {
                 } else {
                     DialogUtils.displayDialog(ImageListActivity.this,
                             "No camera application in your system");
+                }
+            }
+        });
+
+        // event for select item in navigation drawer menu
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                menuItem.setChecked(true);
+                drawerLayout.closeDrawers();
+                Intent intent;
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_item_setting:
+                        //intent = new Intent(MainActivity.this, SettingActivity.class);
+                        //startActivity(intent);
+                        return true;
+                    case R.id.navigation_item_logout:
+                        //intent = new Intent(MainActivity.this,DeveloperSettingActivity.class);
+                        //startActivity(intent);
+                        return true;
+                    default:
+                        return true;
                 }
             }
         });
@@ -140,5 +172,16 @@ public class ImageListActivity extends AppCompatActivity {
                 currentPhotoPath = null;
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
