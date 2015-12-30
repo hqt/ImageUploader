@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
+import android.support.v4.util.Pair;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,10 +14,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
+
 /**
  * Created by Huynh Quang Thao on 12/30/15.
  */
 public class FileUtils {
+
+    private static final String TAG = makeLogTag(FileUtils.class);
 
     public static final int IO_BUFFER_SIZE = 8 * 1024;
 
@@ -70,7 +76,12 @@ public class FileUtils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
     }
 
-    private File createImageFile() throws IOException {
+    /**
+     * return pair of:
+     * File: file object of image
+     * String: path of this image. can be retrieved later
+     */
+    public static Pair<File,String> createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -83,8 +94,9 @@ public class FileUtils {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        String mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        return image;
+        String currentPhotoPath = "file:" + image.getAbsolutePath();
+        Log.e(TAG, "Photo Path: " + currentPhotoPath);
+        return new Pair<>(image, currentPhotoPath);
     }
 
 }

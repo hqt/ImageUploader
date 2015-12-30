@@ -8,7 +8,7 @@ import com.silicons.android.uploader.BuildConfig;
  * Created by Huynh Quang Thao on 12/30/15.
  */
 public class LogUtils {
-    private static final String LOG_PREFIX = "com.hac.android_";
+    private static final String LOG_PREFIX = "com.uploader_";
     private static final int LOG_PREFIX_LENGTH = LOG_PREFIX.length();
     private static final int MAX_LOG_TAG_LENGTH = 23;
 
