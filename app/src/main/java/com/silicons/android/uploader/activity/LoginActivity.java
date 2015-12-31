@@ -11,8 +11,8 @@ import android.widget.Button;
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.PrefStore;
-import com.silicons.android.uploader.task.OAuthTask;
-import com.silicons.android.uploader.task.UserAuthTask;
+import com.silicons.android.uploader.task.flickr.OAuthTask;
+import com.silicons.android.uploader.task.flickr.UserAuthTask;
 
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 

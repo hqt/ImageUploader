@@ -1,4 +1,4 @@
-package com.silicons.android.uploader.task;
+package com.silicons.android.uploader.task.flickr;
 
 import android.app.ProgressDialog;
 import android.content.Context;

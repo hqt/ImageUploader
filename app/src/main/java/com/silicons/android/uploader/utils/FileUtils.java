@@ -105,6 +105,15 @@ public class FileUtils {
         return new Pair<>(image, currentPhotoPath);
     }
 
+    public static File createTemporaryFile(String part, String extension) throws Exception {
+        File tempDir = Environment.getExternalStorageDirectory();
+        tempDir = new File(tempDir.getAbsolutePath() + "/.temp/");
+        if (!tempDir.exists()) {
+            tempDir.mkdir();
+        }
+        return File.createTempFile(part, extension, tempDir);
+    }
+
     public static byte[] convertBitmaptoByte(Bitmap bitmap) {
         //calculate how many bytes our image consists of.
         int bytes = bitmap.getByteCount();

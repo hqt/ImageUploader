@@ -1,4 +1,4 @@
-package com.silicons.android.uploader.task;
+package com.silicons.android.uploader.task.flickr;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,16 +9,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.googlecode.flickrjandroid.Flickr;
-import com.googlecode.flickrjandroid.FlickrException;
 import com.googlecode.flickrjandroid.uploader.UploadMetaData;
 import com.silicons.android.uploader.activity.ImageListActivity;
 import com.silicons.android.uploader.activity.UploaderActivity;
 import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.uploader.manager.FlickrHelper;
-
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
 
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 

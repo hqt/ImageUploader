@@ -6,10 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
-import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -27,7 +25,6 @@ import com.silicons.android.uploader.utils.DialogUtils;
 import com.silicons.android.uploader.utils.FileUtils;
 
 import java.io.File;
-import java.io.IOException;
 
 import static com.silicons.android.uploader.config.AppConstant.*;
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
@@ -49,6 +46,9 @@ public class ImageListActivity extends AppCompatActivity {
     // store photo path from camera
     private String mCurrentPhotoPath;
 
+    // Uri for picture
+    private Uri mImageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,98 +68,13 @@ public class ImageListActivity extends AppCompatActivity {
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         // event for selecting photo from library
-        mPhotoUploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent getPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                getPhotoIntent.setType("image/*");
-                if (getPhotoIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(getPhotoIntent, IntentCode.PICK_PHOTO_INTENT);
-                } else {
-                    DialogUtils.displayDialog(ImageListActivity.this,
-                            "No photo viewer in your system");
-                }
-            }
-        });
+        mPhotoUploadButton.setOnClickListener(mPhotoSelectClickListener);
 
         // event for taking screenshot from camera
-        mCameraUploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-
-                    // Create the File where the photo should go
-                    File photoFile = null;
-
-                    /*try {
-                        Pair<File, String> result = FileUtils.createImageFile();
-                        photoFile = result.first;
-                        mCurrentPhotoPath = result.second;
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                        mCurrentPhotoPath = null;
-                    }*/
-
-                    photoFile = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
-
-                    // Continue only if the File was successfully created
-                    if (photoFile != null) {
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                        startActivityForResult(takePictureIntent, IntentCode.TAKE_CAMERA_INTENT);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Cannot create file.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    DialogUtils.displayDialog(ImageListActivity.this,
-                            "No camera application in your system");
-                }
-            }
-        });
+        mCameraUploadButton.setOnClickListener(mCameraClickListener);
 
         // event for select item in navigation drawer menu
-        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                menuItem.setChecked(true);
-                mDrawerLayout.closeDrawers();
-                Intent intent;
-                switch (menuItem.getItemId()) {
-                    // when user press setting button. open setting activity
-                    case R.id.navigation_item_setting:
-                        return true;
-
-                    // when user press logout. confirm dialog and clear all data
-                    case R.id.navigation_item_logout:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ImageListActivity.this);
-                        builder.setMessage("Data will be swipe after logout. Are you sure ... ?")
-                                .setCancelable(false)
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        FlickrOath.logout();
-                                        Intent intent = new Intent(ImageListActivity.this,
-                                                LoginActivity.class);
-                                        startActivity(intent);
-                                    }
-                                })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                        return true;
-
-                    default:
-                        return true;
-                }
-            }
-        });
+        mNavigationView.setNavigationItemSelectedListener(mNavigationItemListener);
     }
 
     @Override
@@ -180,42 +95,19 @@ public class ImageListActivity extends AppCompatActivity {
             }
 
             // passing URI. instead of decode to bitmap for saving memory :)
-            Uri uri = data.getData();
-            Log.e(TAG, uri.toString());
+            mImageUri = data.getData();
+            Log.e(TAG, "Photo: " + mImageUri.toString());
             Intent intent = new Intent(this, UploaderActivity.class);
-            intent.putExtra("uri_photo_gallery", uri.toString());
+            intent.putExtra("uri_photo_gallery", mImageUri.toString());
             startActivity(intent);
         }
 
         // processing for getting photo from camera
         else if (requestCode == IntentCode.TAKE_CAMERA_INTENT) {
-            // passing camera screenshot path instead of decoded data for saving memory :)
-            if (mCurrentPhotoPath != null) {
-                Log.e(TAG, mCurrentPhotoPath);
-                Intent intent = new Intent(this, UploaderActivity.class);
-                intent.putExtra("camera_photo_path", mCurrentPhotoPath);
-                startActivity(intent);
-                mCurrentPhotoPath = null;
-            }
-
-
-            File f = new File(Environment.getExternalStorageDirectory().toString());
-            for (File temp : f.listFiles()) {
-
-                if (temp.getName().equals("temp.jpg")) {
-
-                    f = temp;
-                    File photo = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
-                    //pic = photo;
-                    break;
-
-                }
-
-            }
-
-
-
-
+            Log.e(TAG, "Camera: " + mImageUri.toString());
+            Intent intent = new Intent(this, UploaderActivity.class);
+            intent.putExtra("uri_photo_gallery", mImageUri.toString());
+            startActivity(intent);
         }
     }
 
@@ -229,5 +121,93 @@ public class ImageListActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    //region Listener callback
+    private View.OnClickListener mPhotoSelectClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent getPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            getPhotoIntent.setType("image/*");
+            if (getPhotoIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(getPhotoIntent, IntentCode.PICK_PHOTO_INTENT);
+            } else {
+                DialogUtils.displayDialog(ImageListActivity.this,
+                        "No photo viewer in your system");
+            }
+        }
+    };
+
+    private View.OnClickListener mCameraClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                File photo = null;
+                try {
+                    // place where to store camera taken picture
+                    photo = FileUtils.createTemporaryFile("picture", ".jpg");
+                    photo.delete();
+                } catch (Exception e) {
+                    Log.v(TAG, "Can't create file to take picture!");
+                    Toast.makeText(getApplicationContext(), "Please check SD card. Image shot is impossible",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                if (photo != null) {
+                    mImageUri = Uri.fromFile(photo);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+                    startActivityForResult(takePictureIntent, IntentCode.TAKE_CAMERA_INTENT);
+                }
+            } else {
+                DialogUtils.displayDialog(ImageListActivity.this,
+                        "No camera application in your system");
+            }
+        }
+    };
+
+    private NavigationView.OnNavigationItemSelectedListener mNavigationItemListener =
+            new NavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(MenuItem menuItem) {
+            menuItem.setChecked(true);
+            mDrawerLayout.closeDrawers();
+            Intent intent;
+            switch (menuItem.getItemId()) {
+                // when user press setting button. open setting activity
+                case R.id.navigation_item_setting:
+                    return true;
+
+                // when user press logout. confirm dialog and clear all data
+                case R.id.navigation_item_logout:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ImageListActivity.this);
+                    builder.setMessage("Data will be swipe after logout. Are you sure ... ?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    FlickrOath.logout();
+                                    Intent intent = new Intent(ImageListActivity.this,
+                                            LoginActivity.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                    return true;
+
+                default:
+                    return true;
+            }
+        }
+    };
+    //endregion
 
 }

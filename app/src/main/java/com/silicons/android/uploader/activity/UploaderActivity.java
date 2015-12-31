@@ -2,7 +2,6 @@ package com.silicons.android.uploader.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,15 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.googlecode.flickrjandroid.FlickrException;
 import com.googlecode.flickrjandroid.uploader.UploadMetaData;
 import com.silicons.android.uploader.R;
-import com.silicons.android.uploader.task.PhotoUploadTask;
-import com.silicons.android.uploader.uploader.manager.FlickrHelper;
+import com.silicons.android.uploader.task.flickr.PhotoUploadTask;
 import com.silicons.android.uploader.utils.FileUtils;
 import com.silicons.android.uploader.widgets.TouchImageView;
-
-import org.xml.sax.SAXException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -63,7 +58,7 @@ public class UploaderActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                mBitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+                mBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
                 byte[] data = FileUtils.convertBitmaptoByte(mBitmap);
                 PhotoUploadTask task = new PhotoUploadTask(UploaderActivity.this, mFileName, data, mUploadMetaData);
                 task.execute();
