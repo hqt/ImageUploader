@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.util.Pair;
@@ -91,14 +92,17 @@ public class ImageListActivity extends AppCompatActivity {
 
                     // Create the File where the photo should go
                     File photoFile = null;
-                    try {
+
+                    /*try {
                         Pair<File, String> result = FileUtils.createImageFile();
                         photoFile = result.first;
                         mCurrentPhotoPath = result.second;
                     } catch (IOException ex) {
                         ex.printStackTrace();
                         mCurrentPhotoPath = null;
-                    }
+                    }*/
+
+                    photoFile = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
 
                     // Continue only if the File was successfully created
                     if (photoFile != null) {
@@ -193,6 +197,25 @@ public class ImageListActivity extends AppCompatActivity {
                 startActivity(intent);
                 mCurrentPhotoPath = null;
             }
+
+
+            File f = new File(Environment.getExternalStorageDirectory().toString());
+            for (File temp : f.listFiles()) {
+
+                if (temp.getName().equals("temp.jpg")) {
+
+                    f = temp;
+                    File photo = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
+                    //pic = photo;
+                    break;
+
+                }
+
+            }
+
+
+
+
         }
     }
 
