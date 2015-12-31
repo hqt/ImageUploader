@@ -1,16 +1,23 @@
 package com.silicons.android.uploader.utils;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.util.Pair;
 import android.util.Log;
+
+import com.silicons.android.uploader.config.UploaderApplication;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -47,8 +54,7 @@ public class FileUtils {
                 text.append(line);
                 text.append('\n');
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             //You'll need to add proper error handling here
             e.printStackTrace();
         }
@@ -81,7 +87,7 @@ public class FileUtils {
      * File: file object of image
      * String: path of this image. can be retrieved later
      */
-    public static Pair<File,String> createImageFile() throws IOException {
+    public static Pair<File, String> createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -99,4 +105,37 @@ public class FileUtils {
         return new Pair<>(image, currentPhotoPath);
     }
 
+    public static byte[] convertBitmaptoByte(Bitmap bitmap) {
+        //calculate how many bytes our image consists of.
+        int bytes = bitmap.getByteCount();
+
+        ByteBuffer buffer = ByteBuffer.allocate(bytes); //Create a new buffer
+        bitmap.copyPixelsToBuffer(buffer); //Move the byte data to the buffer
+
+        //Get the underlying array containing the data.
+        return buffer.array();
+    }
+
+    public static String getImageNameFromUri(Uri uri) {
+        Context context = UploaderApplication.getAppContext();
+        String fileName = null;
+
+        String scheme = uri.getScheme();
+        if (scheme.equals("file")) {
+            fileName = uri.getLastPathSegment();
+        }
+        else if (scheme.equals("content")) {
+            String[] proj = { MediaStore.Images.Media.TITLE };
+            Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
+            if (cursor != null && cursor.getCount() != 0) {
+                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.TITLE);
+                cursor.moveToFirst();
+                fileName = cursor.getString(columnIndex);
+            }
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return fileName;
+    }
 }

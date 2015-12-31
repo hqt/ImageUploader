@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.googlecode.flickrjandroid.Flickr;
 import com.googlecode.flickrjandroid.FlickrException;
+import com.googlecode.flickrjandroid.uploader.UploadMetaData;
 import com.silicons.android.uploader.activity.ImageListActivity;
 import com.silicons.android.uploader.activity.UploaderActivity;
 import com.silicons.android.uploader.uploader.manager.FlickrHelper;
@@ -31,11 +32,13 @@ public class PhotoUploadTask extends AsyncTask<Void, Void, String> {
 
     private String mImageName;
     private byte[] mData;
+    private UploadMetaData mUploadMetaData;
 
-    public PhotoUploadTask(Context context, String imageName, byte[] data) {
+    public PhotoUploadTask(Context context, String imageName, byte[] data, UploadMetaData uploadMetaData) {
         this.mContext = context;
         this.mImageName = imageName;
         this.mData = data;
+        this.mUploadMetaData = uploadMetaData;
     }
 
     @Override
@@ -57,7 +60,7 @@ public class PhotoUploadTask extends AsyncTask<Void, Void, String> {
         Flickr flickr = FlickrHelper.getInstance().getFlickr();
         String imageId = null;
         try {
-            imageId = flickr.getUploader().upload(mImageName, mData, null);
+            imageId = flickr.getUploader().upload(mImageName, mData, mUploadMetaData);
         } catch (FlickrException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -75,7 +78,8 @@ public class PhotoUploadTask extends AsyncTask<Void, Void, String> {
         }
 
         if (result == null) {
-            Toast.makeText(mContext, "Cannot download image. Please try again.", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Cannot download image. Please try again.",
+                    Toast.LENGTH_LONG).show();
         }
 
         // open again image list activity
