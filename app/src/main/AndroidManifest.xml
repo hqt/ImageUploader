@@ -24,14 +24,27 @@
             android:name=".activity.ImageListActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="INTENT_ACTION_CONTACT_PHOTO_UPLOADED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="INTENT_ACTION_ACT_ON_MY_PHOTO" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="flickrj-android-sample-oauth" />
+                <data android:scheme="flickr-viewer-oauth" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 

@@ -1,11 +1,12 @@
 package com.silicons.android.uploader.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.util.Pair;
@@ -20,24 +21,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.googlecode.flickrjandroid.Flickr;
-import com.googlecode.flickrjandroid.FlickrException;
-import com.googlecode.flickrjandroid.oauth.OAuthToken;
-import com.googlecode.flickrjandroid.test.TestInterface;
 import com.silicons.android.uploader.R;
-import com.silicons.android.uploader.config.AppConstant;
+import com.silicons.android.uploader.uploader.FlickrOath;
 import com.silicons.android.uploader.utils.DialogUtils;
 import com.silicons.android.uploader.utils.FileUtils;
 
-import org.json.JSONException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Collection;
-import java.util.Collections;
 
 import static com.silicons.android.uploader.config.AppConstant.*;
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
@@ -50,21 +40,19 @@ public class ImageListActivity extends AppCompatActivity {
 
     private static final String TAG = makeLogTag(ImageListActivity.class);
 
-    private FloatingActionButton photoUploadButton;
-    private FloatingActionButton cameraUploadButton;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
+    private FloatingActionButton mPhotoUploadButton;
+    private FloatingActionButton mCameraUploadButton;
+    private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationView;
 
 
     // store photo path from camera
-    private String currentPhotoPath;
+    private String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_list);
-
-        Log.e("hqthao", "fucking");
 
         // set toolbar option
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -74,13 +62,13 @@ public class ImageListActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
 
-        photoUploadButton = (FloatingActionButton) findViewById(R.id.fab_photos);
-        cameraUploadButton = (FloatingActionButton) findViewById(R.id.fab_camera);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        mPhotoUploadButton = (FloatingActionButton) findViewById(R.id.fab_photos);
+        mCameraUploadButton = (FloatingActionButton) findViewById(R.id.fab_camera);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         // event for selecting photo from library
-        photoUploadButton.setOnClickListener(new View.OnClickListener() {
+        mPhotoUploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent getPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -95,7 +83,7 @@ public class ImageListActivity extends AppCompatActivity {
         });
 
         // event for taking screenshot from camera
-        cameraUploadButton.setOnClickListener(new View.OnClickListener() {
+        mCameraUploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -107,10 +95,10 @@ public class ImageListActivity extends AppCompatActivity {
                     try {
                         Pair<File, String> result = FileUtils.createImageFile();
                         photoFile = result.first;
-                        currentPhotoPath = result.second;
+                        mCurrentPhotoPath = result.second;
                     } catch (IOException ex) {
                         ex.printStackTrace();
-                        currentPhotoPath = null;
+                        mCurrentPhotoPath = null;
                     }
 
                     // Continue only if the File was successfully created
@@ -129,21 +117,41 @@ public class ImageListActivity extends AppCompatActivity {
         });
 
         // event for select item in navigation drawer menu
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 menuItem.setChecked(true);
-                drawerLayout.closeDrawers();
+                mDrawerLayout.closeDrawers();
                 Intent intent;
                 switch (menuItem.getItemId()) {
+                    // when user press setting button. open setting activity
                     case R.id.navigation_item_setting:
-                        //intent = new Intent(MainActivity.this, SettingActivity.class);
-                        //startActivity(intent);
                         return true;
+
+                    // when user press logout. confirm dialog and clear all data
                     case R.id.navigation_item_logout:
-                        //intent = new Intent(MainActivity.this,DeveloperSettingActivity.class);
-                        //startActivity(intent);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ImageListActivity.this);
+                        builder.setMessage("Data will be swipe after logout. Are you sure ... ?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        FlickrOath.logout();
+                                        Intent intent = new Intent(ImageListActivity.this,
+                                                LoginActivity.class);
+                                        startActivity(intent);
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
                         return true;
+
                     default:
                         return true;
                 }
@@ -179,12 +187,12 @@ public class ImageListActivity extends AppCompatActivity {
         // processing for getting photo from camera
         else if (requestCode == IntentCode.TAKE_CAMERA_INTENT) {
             // passing camera screenshot path instead of decoded data for saving memory :)
-            if (currentPhotoPath != null) {
-                Log.e(TAG, currentPhotoPath);
+            if (mCurrentPhotoPath != null) {
+                Log.e(TAG, mCurrentPhotoPath);
                 Intent intent = new Intent(this, UploaderActivity.class);
-                intent.putExtra("camera_photo_path", currentPhotoPath);
+                intent.putExtra("camera_photo_path", mCurrentPhotoPath);
                 startActivity(intent);
-                currentPhotoPath = null;
+                mCurrentPhotoPath = null;
             }
         }
     }
@@ -194,7 +202,7 @@ public class ImageListActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
+                mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
         return super.onOptionsItemSelected(item);

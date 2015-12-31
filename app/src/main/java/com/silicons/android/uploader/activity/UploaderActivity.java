@@ -30,8 +30,8 @@ import java.io.IOException;
  */
 public class UploaderActivity extends AppCompatActivity {
 
-    private TouchImageView imageView;
-    private ImageButton uploadButton;
+    private TouchImageView mImageView;
+    private ImageButton mUploadButton;
 
 
     @Override
@@ -39,8 +39,8 @@ public class UploaderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_image);
 
-        imageView = (TouchImageView) findViewById(R.id.image_view);
-        uploadButton = (ImageButton) findViewById(R.id.btn_upload);
+        mImageView = (TouchImageView) findViewById(R.id.image_view);
+        mUploadButton = (ImageButton) findViewById(R.id.btn_upload);
 
         Bundle extras = getIntent().getExtras();
         String uriStr = extras.getString("uri_photo_gallery");
@@ -52,7 +52,7 @@ public class UploaderActivity extends AppCompatActivity {
             parseImageFromPath(cameraPhotoPath);
         }
 
-        uploadButton.setOnClickListener(new View.OnClickListener() {
+        mUploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -63,7 +63,7 @@ public class UploaderActivity extends AppCompatActivity {
     private void parseImageFromUri(Uri uri) {
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-            imageView.setImageBitmap(bitmap);
+            mImageView.setImageBitmap(bitmap);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,7 +74,7 @@ public class UploaderActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
 
 		/* Associate the Bitmap to the ImageView */
-        imageView.setImageBitmap(bitmap);
+        mImageView.setImageBitmap(bitmap);
     }
 
     class UploadImageTask extends AsyncTask<Void, Void, Void> {

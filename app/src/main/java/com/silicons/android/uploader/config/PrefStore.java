@@ -45,27 +45,27 @@ public class PrefStore {
     /**
      * Default value for {@link PrefStore#PREF_IS_FIRST_RUN}
      */
-    public static final boolean DEFAULT_FIRST_RUN = true;
+    private static final boolean DEFAULT_FIRST_RUN = true;
 
     /**
      * Default value for {@link PrefStore#PREF_FLICKR_TOKEN}
      */
-    public static final String DEFAULT_FLICKR_TOKEN = null;
+    private static final String DEFAULT_FLICKR_TOKEN = null;
 
     /**
      * Default value for {@link PrefStore#PREF_FLICKR_SECRET}
      */
-    public static final String DEFAULT_FLICKR_SECRET = null;
+    private static final String DEFAULT_FLICKR_SECRET = null;
 
     /**
      * Default value for {@link PrefStore#PREF_FLICKR_USER_ID}
      */
-    public static final String DEFAULT_FLICKR_USER_ID = null;
+    private static final String DEFAULT_FLICKR_USER_ID = null;
 
     /**
      * Default value for {@link PrefStore#PREF_FLICKR_USER_NAME}
      */
-    public static final String DEFAULT_FLICKR_USER_NAME = null;
+    private static final String DEFAULT_FLICKR_USER_NAME = null;
 
 
     ////////////////////////////////////////////////////////////////////
@@ -132,5 +132,9 @@ public class PrefStore {
     ///////////////////// QUERY DATA EXIST ///////////////////////////////
     public static boolean isFirstRun() {
         return getSharedPreferences().getBoolean(PREF_IS_FIRST_RUN, DEFAULT_FIRST_RUN);
+    }
+
+    public static boolean isLogin() {
+        return (getFlickrToken() != null);
     }
 }

@@ -4,10 +4,11 @@ package com.silicons.android.uploader.config;
  * Created by Huynh Quang Thao on 12/30/15.
  */
 public class AppConstant {
-    public static final String FLICKR_PUBLIC_KEY = "b5d217d0f1111ee2fe13b5aae3536afc";
-    public static final String FLICKR_SECRET_KEY = "fa506977ada6eb1a";
+    public static final String FLICKR_PUBLIC_KEY = "583dad0f8468d3c0a294fe48d269be98";
+    public static final String FLICKR_SECRET_KEY = "b69ac04b0e1cac72";
 
     public static final String FLICKR_FOLDER = "flick_folder";
+    public static final String ID_SCHEME = "flickr-viewer-oauth";
 
     public static class IntentCode {
         public static final int PICK_PHOTO_INTENT = 100;
