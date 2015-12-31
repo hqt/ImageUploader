@@ -1,4 +1,4 @@
-package com.silicons.android.uploader.uploader;
+package com.silicons.android.uploader.uploader.manager;
 
 import com.googlecode.flickrjandroid.Flickr;
 import com.googlecode.flickrjandroid.REST;
@@ -21,8 +21,6 @@ public final class FlickrHelper {
     private static final String TAG = makeLogTag(FlickrHelper.class);
 
     private static FlickrHelper instance = null;
-    //private static final String API_KEY = "da4fadd0084ea1799ad33048f0d6a5c5"; //$NON-NLS-1$
-    //public static final String API_SEC = "186b04791439c326"; //$NON-NLS-1$
 
     private FlickrHelper() {
 

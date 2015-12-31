@@ -1,4 +1,4 @@
-package com.silicons.android.uploader.uploader;
+package com.silicons.android.uploader.uploader.authen;
 
 import android.os.Environment;
 
@@ -18,7 +18,7 @@ public class FlickrOath {
 
     public static OAuth loadSavedOAuth() {
         String userId = PrefStore.getFlickrUserId();
-        String userName = PrefStore.getPrefFlickrUserName();
+        String userName = PrefStore.getFlickrUserName();
         String token = PrefStore.getFlickrToken();
         String tokenSecret = PrefStore.getFlickTokenSecret();
 
@@ -36,7 +36,7 @@ public class FlickrOath {
         return oauth;
     }
 
-    public static void saveFlickrAuthToken(OAuth oauth) {
+    public static void saveAuthInformation(OAuth oauth) {
         String oauthToken = null;
         String tokenSecret = null;
         String userId = null;
@@ -69,6 +69,6 @@ public class FlickrOath {
                 cacheFile.delete();
             }
         }
-        saveFlickrAuthToken(null);
+        saveAuthInformation(null);
     }
 }

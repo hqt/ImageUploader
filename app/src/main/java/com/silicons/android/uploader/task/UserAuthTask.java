@@ -15,15 +15,15 @@ import com.googlecode.flickrjandroid.oauth.OAuthToken;
 import com.googlecode.flickrjandroid.people.User;
 import com.silicons.android.uploader.activity.ImageListActivity;
 import com.silicons.android.uploader.activity.LoginActivity;
-import com.silicons.android.uploader.uploader.FlickrHelper;
-import com.silicons.android.uploader.uploader.FlickrOath;
+import com.silicons.android.uploader.uploader.manager.FlickrHelper;
+import com.silicons.android.uploader.uploader.authen.FlickrOath;
 
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 
 /** Task for getting username and user id after get user's token
  * Created by Huynh Quang Thao on 12/31/15.
  */
-public class UserAuthTask extends AsyncTask<String, Integer, OAuth> {
+public class UserAuthTask extends AsyncTask<Void, Integer, OAuth> {
 
     private static final String TAG = makeLogTag(UserAuthTask.class);
 
@@ -56,10 +56,10 @@ public class UserAuthTask extends AsyncTask<String, Integer, OAuth> {
     }
 
     @Override
-    protected OAuth doInBackground(String... params) {
+    protected OAuth doInBackground(Void... params) {
 
-        Flickr f = FlickrHelper.getInstance().getFlickr();
-        OAuthInterface oauthApi = f.getOAuthInterface();
+        Flickr flickr = FlickrHelper.getInstance().getFlickr();
+        OAuthInterface oauthApi = flickr.getOAuthInterface();
         try {
             return oauthApi.getAccessToken(mOauthToken, mOauthTokenSecret, mOauthVerifier);
         } catch (Exception e) {
@@ -91,7 +91,7 @@ public class UserAuthTask extends AsyncTask<String, Integer, OAuth> {
             }
 
             Log.e(TAG, "Saving user " + user);
-            FlickrOath.saveFlickrAuthToken(result);
+            FlickrOath.saveAuthInformation(result);
 
             // open ImageListActivity
             Intent intent = new Intent(mContext, ImageListActivity.class);

@@ -1,5 +1,7 @@
 package com.silicons.android.uploader.config;
 
+import android.net.Uri;
+
 /**
  * Created by Huynh Quang Thao on 12/30/15.
  */
@@ -9,6 +11,13 @@ public class AppConstant {
 
     public static final String FLICKR_FOLDER = "flick_folder";
     public static final String FLICKR_RETURN_SCHEMA = "flickr-viewer-oauth";
+    public static final Uri OAUTH_CALLBACK_URI = Uri.parse(AppConstant.FLICKR_RETURN_SCHEMA + "://oauth");
+
+    // variable for checking current mode. All manager instance will based on this for return accurated object
+    public static final class ImageProviderMode {
+        public static final String FLICKR = "flickr_mode";
+        public static final String PICASA = "picasa_mode";
+    }
 
     public static class IntentCode {
         public static final int PICK_PHOTO_INTENT = 100;

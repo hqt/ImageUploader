@@ -15,7 +15,7 @@ import com.googlecode.flickrjandroid.oauth.OAuthToken;
 import com.silicons.android.uploader.activity.LoginActivity;
 import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.PrefStore;
-import com.silicons.android.uploader.uploader.FlickrHelper;
+import com.silicons.android.uploader.uploader.manager.FlickrHelper;
 
 import java.net.URL;
 
@@ -27,8 +27,6 @@ import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 public class OAuthTask extends AsyncTask<Void, Integer, String> {
 
     private final String TAG = makeLogTag(OAuthTask.class);
-
-    private final Uri OAUTH_CALLBACK_URI = Uri.parse(AppConstant.FLICKR_RETURN_SCHEMA + "://oauth");
 
     private ProgressDialog mProgressDialog;
     private Context mContext;
@@ -54,15 +52,15 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
     @Override
     protected String doInBackground(Void... params) {
         try {
-            Flickr f = FlickrHelper.getInstance().getFlickr();
-            OAuthToken oauthToken = f.getOAuthInterface().getRequestToken(
-                    OAUTH_CALLBACK_URI.toString());
+            Flickr flickr = FlickrHelper.getInstance().getFlickr();
+            OAuthToken oauthToken = flickr.getOAuthInterface().getRequestToken(
+                    AppConstant.OAUTH_CALLBACK_URI.toString());
 
             // save token information to database
             PrefStore.setFlickrToken(oauthToken.getOauthToken());
             PrefStore.setFlickrSecret(oauthToken.getOauthTokenSecret());
 
-            URL oauthUrl = f.getOAuthInterface().buildAuthenticationUrl(
+            URL oauthUrl = flickr.getOAuthInterface().buildAuthenticationUrl(
                     Permission.WRITE, oauthToken);
             return oauthUrl.toString();
         } catch (Exception e) {

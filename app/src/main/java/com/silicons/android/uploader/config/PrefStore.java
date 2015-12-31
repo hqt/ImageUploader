@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.silicons.android.uploader.config.AppConstant.ImageProviderMode;
 import com.silicons.android.uploader.utils.LogUtils;
 
 /**
@@ -39,6 +40,11 @@ public class PrefStore {
      */
     public static final String PREF_FLICKR_USER_NAME= "pref_flick_user_name";
 
+    /**
+     * preference key for getting current app upload provider mode
+     */
+    public static final String PREF_PROVIDER_MODE= "pref_provider_mode";
+
 
     ///////////////////////////////////////////////////////////////
     /////////////////   DEFAULT VALUE   ///////////////////////////
@@ -67,6 +73,10 @@ public class PrefStore {
      */
     private static final String DEFAULT_FLICKR_USER_NAME = null;
 
+    /**
+     * Default value for {@link PrefStore#PREF_PROVIDER_MODE}
+     */
+    private static final String DEFAULT_PROVIDER_MODE = ImageProviderMode.FLICKR;
 
     ////////////////////////////////////////////////////////////////////
     /////////////////////////////  GETTER //////////////////////////////
@@ -90,8 +100,12 @@ public class PrefStore {
         return getSharedPreferences().getString(PREF_FLICKR_USER_ID, DEFAULT_FLICKR_USER_ID);
     }
 
-    public static String getPrefFlickrUserName() {
+    public static String getFlickrUserName() {
         return getSharedPreferences().getString(PREF_FLICKR_USER_NAME, DEFAULT_FLICKR_USER_NAME);
+    }
+
+    public static String getProviderMode() {
+        return getSharedPreferences().getString(PREF_PROVIDER_MODE, DEFAULT_PROVIDER_MODE);
     }
 
     ////////////////////////////////////////////////////////////////////
@@ -124,6 +138,12 @@ public class PrefStore {
     public static void setFlickrUserName(String flickrUserName) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
         editor.putString(PREF_FLICKR_USER_NAME, flickrUserName);
+        editor.commit();
+    }
+
+    public static void setProviderMode(String providerMode) {
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putString(PREF_PROVIDER_MODE, providerMode);
         editor.commit();
     }
 
