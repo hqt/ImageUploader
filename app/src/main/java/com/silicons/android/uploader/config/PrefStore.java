@@ -135,6 +135,6 @@ public class PrefStore {
     }
 
     public static boolean isLogin() {
-        return (getFlickrToken() != null);
+        return (getFlickrUserId() != null);
     }
 }

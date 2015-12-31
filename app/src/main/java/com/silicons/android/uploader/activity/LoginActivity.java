@@ -1,27 +1,18 @@
 package com.silicons.android.uploader.activity;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.googlecode.flickrjandroid.Flickr;
-import com.googlecode.flickrjandroid.auth.Permission;
-import com.googlecode.flickrjandroid.oauth.OAuthToken;
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.PrefStore;
-import com.silicons.android.uploader.uploader.FlickrHelper;
-
-import java.net.URL;
+import com.silicons.android.uploader.task.OAuthTask;
+import com.silicons.android.uploader.task.UserAuthTask;
 
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 
@@ -53,71 +44,39 @@ public class LoginActivity extends AppCompatActivity {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new OAuthTask().execute();
+                // first step. authentication for getting token
+                new OAuthTask(LoginActivity.this).execute();
             }
         });
     }
 
-    public class OAuthTask extends AsyncTask<Void, Integer, String> {
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        private final String TAG = makeLogTag(OAuthTask.class);
+        // when first step done. will return a uri-schema.
+        // LoginActivity will handle this schema (declared in manifest file)
+        // come to second step. process this uri. for getting user information
+        Intent intent = getIntent();
+        String schema = intent.getScheme();
+        if (AppConstant.FLICKR_RETURN_SCHEMA.equals(schema)) {
+            Uri uri = intent.getData();
+            String query = uri.getQuery();
+            Log.e(TAG, "Returned Query: " + query);
+            String[] data = query.split("&");
+            if (data.length == 2) {
+                String oauthToken = data[0].substring(data[0].indexOf("=") + 1);
+                String oauthVerifier = data[1].substring(data[1].indexOf("=") + 1);
+                Log.e(TAG, "OAuth Token: " + oauthToken);
+                Log.e(TAG, "OAuth Verifier: " + oauthVerifier);
 
-        private final Uri OAUTH_CALLBACK_URI = Uri.parse(AppConstant.ID_SCHEME + "://oauth");
-
-        private ProgressDialog mProgressDialog;
-        private Context mContext;
-
-        public OAuthTask() {
-            mContext = LoginActivity.this;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mProgressDialog = ProgressDialog.show(mContext,"Login", "Login from Flickr ...");
-            mProgressDialog.setCanceledOnTouchOutside(true);
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dlg) {
-                    OAuthTask.this.cancel(true);
+                String oauthSecret = PrefStore.getFlickTokenSecret();
+                if (oauthSecret != null) {
+                    // run task for getting user information. and then move list activity
+                    UserAuthTask task = new UserAuthTask(this, oauthToken, oauthSecret, oauthVerifier);
+                    task.execute();
                 }
-            });
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                Flickr f = FlickrHelper.getInstance().getFlickr();
-                OAuthToken oauthToken = f.getOAuthInterface().getRequestToken(
-                        OAUTH_CALLBACK_URI.toString());
-
-                // save token information to database
-                PrefStore.setFlickrToken(oauthToken.getOauthToken());
-                PrefStore.setFlickrSecret(oauthToken.getOauthTokenSecret());
-
-                URL oauthUrl = f.getOAuthInterface().buildAuthenticationUrl(
-                        Permission.WRITE, oauthToken);
-                return oauthUrl.toString();
-            } catch (Exception e) {
-                Log.e(TAG, "Error to oauth: " + e);
-                return "error:" + e.getMessage();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (mProgressDialog != null) {
-                mProgressDialog.dismiss();
-            }
-
-            if (result != null && !result.startsWith("error") ) {
-                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri
-                        .parse(result)));
-            } else {
-                Toast.makeText(mContext, "Error: " + result, Toast.LENGTH_LONG).show();
             }
         }
     }
-
 }

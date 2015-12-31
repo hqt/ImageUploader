@@ -8,7 +8,7 @@ public class AppConstant {
     public static final String FLICKR_SECRET_KEY = "b69ac04b0e1cac72";
 
     public static final String FLICKR_FOLDER = "flick_folder";
-    public static final String ID_SCHEME = "flickr-viewer-oauth";
+    public static final String FLICKR_RETURN_SCHEMA = "flickr-viewer-oauth";
 
     public static class IntentCode {
         public static final int PICK_PHOTO_INTENT = 100;
