@@ -1,4 +1,4 @@
-# <img src="AppImages/app_image.png" width="96"/> iUploader
+# <img src="AppImages/app_image.png" width="90"/> iUploader
 Application for uploading images to Flickr Service. This application is for Silicon Straits testing purpose.
 
 # This application provided:

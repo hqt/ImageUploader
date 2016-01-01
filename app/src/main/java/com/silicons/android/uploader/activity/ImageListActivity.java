@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -220,6 +221,8 @@ public class ImageListActivity extends AppCompatActivity
             switch (menuItem.getItemId()) {
                 // when user press setting button. open setting activity
                 case R.id.navigation_item_setting:
+                    intent = new Intent(ImageListActivity.this, SettingActivity.class);
+                    startActivity(intent);
                     return true;
 
                 // when user press logout. confirm dialog and clear all data

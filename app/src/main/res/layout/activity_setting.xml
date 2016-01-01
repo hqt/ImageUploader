@@ -20,14 +20,13 @@
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:layout_below="@+id/toolbar"
-            android:background="@drawable/main_drop_shadow"/>
-
+            android:background="@drawable/setting_drop_shadow" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_below="@+id/toolbar"
             android:orientation="vertical"
             android:padding="5dp">
@@ -35,19 +34,60 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
                 android:layout_marginTop="15dp"
+                android:text="General Setting"
                 android:textColor="@color/primary"
-                android:textStyle="bold"
-                android:text="Khoảng cách thông báo (m)"/>
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="2dip"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="3dp"
-                android:background="@drawable/drop_shadow" />
+                android:background="@drawable/setting_drop_shadow" />
 
+            <CheckBox
+                android:id="@+id/networkCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginBottom="15dip"
+                android:layout_marginTop="5dip"
+                android:checked="true"
+                android:text="@string/setting_network"
+                android:textColor="@color/primary"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+            <CheckBox
+                android:id="@+id/privacyCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginBottom="15dip"
+                android:layout_marginTop="5dip"
+                android:checked="true"
+                android:text="@string/setting_privacy_data"
+                android:textColor="@color/primary"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Sorting setting"
+                android:textColor="@color/primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/setting_drop_shadow" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -61,21 +101,19 @@
                     android:layout_weight="2"
                     android:gravity="left|center"
                     android:padding="5dp"
-                    android:text="Trạm xe buýt:"
+                    android:text="Uploaded photos:"
                     android:textColor="@color/primary"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/edit_bus_distance"
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/uploaded_sort_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="left|center"
-                    android:hint="120"
-                    android:inputType="number"
-                    android:paddingLeft="10dp"
-                    android:textColor="#000"
-                    android:textCursorDrawable="@null" />
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="3"
+                    android:entries="@array/uploaded_sort_type"
+                    android:textSize="15sp" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -90,22 +128,21 @@
                     android:layout_weight="2"
                     android:gravity="left|center"
                     android:padding="5dp"
-                    android:text="Xe máy:"
+                    android:text="Fail Upload photos:"
                     android:textColor="@color/primary"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/edit_motor_distance"
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/failed_sort_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="left|center"
-                    android:hint="120"
-                    android:inputType="number"
-                    android:paddingLeft="10dp"
-                    android:textColor="#000"
-                    android:textCursorDrawable="@null" />
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="3"
+                    android:entries="@array/uploaded_sort_type"
+                    android:textSize="15sp" />
+
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -121,7 +158,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
                     android:background="@color/primary"
-                    android:text="Đồng ý"
+                    android:text="OK"
                     android:textColor="#fff" />
 
                 <Button
@@ -130,7 +167,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
                     android:background="@color/primary"
-                    android:text="Huỷ bỏ"
+                    android:text="Cancel"
                     android:textColor="#fff" />
             </LinearLayout>
 

@@ -21,6 +21,27 @@ public class PrefStore {
     public static final String PREF_IS_FIRST_RUN = "is_first_run";
 
     /**
+     * preference key for using mobile network or not
+     */
+    public static final String PREF_IS_MOBILE_NETWORK = "pref_mobile_network";
+
+    /**
+     * preference key for deleting privacy data before log out or not
+     */
+    public static final String PREF_PRIVACY_DATA = "pref_privacy_data";
+
+    /**
+     * preference key for choosing sort type for uploading photos
+     */
+    public static final String PREF_UPLOADED_SORT_TYPE = "pref_uploaded_sort_type";
+
+    /**
+     * preference key for choosing sort type for failed upload photos
+     */
+    public static final String PREF_FAILED_SORT_TYPE = "pref_failed_sort_type";
+
+
+    /**
      * preference key that store flick token of flickr
      */
     public static final String PREF_FLICKR_TOKEN = "pref_flick_token";
@@ -52,6 +73,26 @@ public class PrefStore {
      * Default value for {@link PrefStore#PREF_IS_FIRST_RUN}
      */
     private static final boolean DEFAULT_FIRST_RUN = true;
+
+    /**
+     * Default value for {@link PrefStore#PREF_UPLOADED_SORT_TYPE}
+     */
+    private static final int DEFAULT_UPLOAD_SORT_TYPE = 0;
+
+    /**
+     * Default value for {@link PrefStore#PREF_FAILED_SORT_TYPE}
+     */
+    private static final int DEFAULT_FAIL_SORT_TYPE = 0;
+
+    /**
+     * Default value for {@link PrefStore#PREF_IS_MOBILE_NETWORK}
+     */
+    private static final boolean DEFAULT_MOBILE_NETWORK = false;
+
+    /**
+     * Default value for {@link PrefStore#PREF_PRIVACY_DATA}
+     */
+    private static final boolean DEFAULT_PRIVACY_DATA = true;
 
     /**
      * Default value for {@link PrefStore#PREF_FLICKR_TOKEN}
@@ -88,6 +129,22 @@ public class PrefStore {
         return PreferenceManager.getDefaultSharedPreferences(UploaderApplication.getAppContext());
     }
 
+    public static boolean getIsMobileNetwork() {
+        return getSharedPreferences().getBoolean(PREF_IS_MOBILE_NETWORK, DEFAULT_MOBILE_NETWORK);
+    }
+
+    public static boolean getIsPrivacy() {
+        return getSharedPreferences().getBoolean(PREF_PRIVACY_DATA, DEFAULT_PRIVACY_DATA);
+    }
+
+    public static int getUploadSortType() {
+        return getSharedPreferences().getInt(PREF_UPLOADED_SORT_TYPE, DEFAULT_UPLOAD_SORT_TYPE);
+    }
+
+    public static int getFailSortType() {
+        return getSharedPreferences().getInt(PREF_FAILED_SORT_TYPE, DEFAULT_FAIL_SORT_TYPE);
+    }
+
     public static String getFlickrToken() {
         return getSharedPreferences().getString(PREF_FLICKR_TOKEN, DEFAULT_FLICKR_TOKEN);
     }
@@ -116,6 +173,31 @@ public class PrefStore {
         editor.putBoolean(PREF_IS_FIRST_RUN, false);
         editor.commit();
     }
+
+    public static void setMobileNetwork(boolean state) {
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putBoolean(PREF_IS_MOBILE_NETWORK, state);
+        editor.commit();
+    }
+
+    public static void setPrivacyData(boolean state) {
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putBoolean(PREF_PRIVACY_DATA, state);
+        editor.commit();
+    }
+
+    public static void setUploadSortType(int type) {
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putInt(PREF_UPLOADED_SORT_TYPE, type);
+        editor.commit();
+    }
+
+    public static void setFailSortType(int type) {
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putInt(PREF_FAILED_SORT_TYPE, type);
+        editor.commit();
+    }
+
 
     public static void setFlickrToken(String flickrToken) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
