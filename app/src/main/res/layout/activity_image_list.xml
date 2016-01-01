@@ -9,8 +9,8 @@
     android:fitsSystemWindows="true">
 
     <LinearLayout
-
-        android:orientation="vertical" android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.Toolbar
@@ -32,6 +32,8 @@
                 android:layout_below="@+id/toolbar"
                 android:background="?attr/colorPrimary"
                 android:elevation="6dp"
+                app:tabIndicatorColor="#FF0083"
+                app:tabIndicatorHeight="3dp"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
@@ -48,32 +50,34 @@
                 android:layout_gravity="right|bottom"
                 android:layout_marginBottom="20dip"
                 android:layout_marginRight="16dip"
-                fab:fab_addButtonColorNormal="@color/accent"
-                fab:fab_addButtonColorPressed="@color/accent_dark"
-                fab:fab_addButtonPlusIconColor="@color/white"
-                fab:fab_addButtonStrokeVisible="false"
+                app:fab_addButtonColorNormal="#0061D5"
+                app:fab_addButtonColorPressed="#4d90fe"
+                app:fab_addButtonPlusIconColor="@color/white"
+                app:fab_addButtonStrokeVisible="false"
                 fab:fab_labelStyle="@style/menu_labels_style"
-                fab:fab_labelsPosition="left">
+                app:fab_labelsPosition="left"
+                app:fab_icon="@drawable/ic_sync">
 
                 <com.getbase.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fab_photos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    fab:fab_colorNormal="@color/accent"
-                    fab:fab_colorPressed="@color/accent_dark"
-                    fab:fab_icon="@drawable/ic_photos"
-                    fab:fab_plusIconColor="@color/white"
-                    fab:fab_size="mini" />
+
+                    app:fab_colorNormal="@color/accent"
+                    app:fab_colorPressed="@color/accent_dark"
+                    app:fab_icon="@drawable/ic_photos"
+                    app:fab_plusIconColor="@color/white"
+                    app:fab_size="mini" />
 
                 <com.getbase.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fab_camera"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    fab:fab_colorNormal="@color/accent"
-                    fab:fab_colorPressed="@color/accent_dark"
-                    fab:fab_icon="@drawable/ic_camera"
-                    fab:fab_plusIconColor="@color/white"
-                    fab:fab_size="mini" />
+                    app:fab_colorNormal="@color/accent"
+                    app:fab_colorPressed="@color/accent_dark"
+                    app:fab_icon="@drawable/ic_camera"
+                    app:fab_plusIconColor="@color/white"
+                    app:fab_size="mini" />
 
             </com.getbase.floatingactionbutton.FloatingActionsMenu>
         </FrameLayout>

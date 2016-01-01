@@ -5,11 +5,14 @@
     <color name="colorAccent">#FF4081</color>
     <!--<color name="primary">#3F51B5</color>-->
     <!--<color name="primary">#3949AB</color>-->
-    <color name="primary">#009688</color>
+    <color name="primary">#0061D5</color>
+
+
     <color name="primary_dark">#303F9F</color>
     <!-- <color name="primary_dark">#1976D2</color>-->
-    <color name="accent">#FF4081</color>
+    <color name="accent">#FF0083</color>
     <color name="accent_dark">#ff2929</color>
+
     <color name="map">#4d90fe</color>
     <color name="gps">#F1F1F1</color>
     <color name="accent_1">#FFFFFF</color>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ImageUploader</string>
+    <string name="app_name">iUploader</string>
     <string name="action_settings">Settings</string>
     <string name="setting">Setting</string>
     <string name="logout">Log out</string>

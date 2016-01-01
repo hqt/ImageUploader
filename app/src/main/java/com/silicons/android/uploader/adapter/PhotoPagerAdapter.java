@@ -34,13 +34,13 @@ public class PhotoPagerAdapter extends FragmentStatePagerAdapter {
         Fragment fragment;
         switch (position) {
             case 0:
-                fragment = new UploadedPhotoFragment();
+                fragment = UploadedPhotoFragment.newInstance();
                 break;
             case 1:
-                fragment = new QueuePhotoFragment();
+                fragment = new QueuePhotoFragment().newInstance();
                 break;
             case 2:
-                fragment = new FailUploadFragment();
+                fragment = new FailUploadFragment().newInstance();
                 break;
             default:
                 return null;

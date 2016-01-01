@@ -50,6 +50,8 @@ public class ImageListActivity extends AppCompatActivity
     private FloatingActionButton mCameraUploadButton;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
 
 
     // store photo path from camera
@@ -67,7 +69,7 @@ public class ImageListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_camera);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_three_dot);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
 
@@ -75,29 +77,26 @@ public class ImageListActivity extends AppCompatActivity
         mCameraUploadButton = (FloatingActionButton) findViewById(R.id.fab_camera);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
-        final PhotoPagerAdapter adapter = new PhotoPagerAdapter(getSupportFragmentManager(), this);
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(adapter);
+        // Set up tab view
+        PhotoPagerAdapter adapter = new PhotoPagerAdapter(getSupportFragmentManager(), this);
+        mViewPager.setAdapter(adapter);
+        mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        mTabLayout.setupWithViewPager(mViewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        /*tabLayout.addTab(tabLayout.newTab().setText(R.string.upload_photo_tab));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.queue_photo_tab));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.fail_upload_photo_tab));*/
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.setupWithViewPager(viewPager);
-
-        // tab view
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            TabLayout.Tab tab = tabLayout.getTabAt(i);
+        // configure custom tab view
+        for (int i = 0; i < mTabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = mTabLayout.getTabAt(i);
             tab.setCustomView(adapter.getTabView(i));
         }
 
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+                mViewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
