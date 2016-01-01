@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.googlecode.flickrjandroid.util.ByteUtilities;
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.uploader.authen.FlickrOath;
 import com.silicons.android.uploader.utils.DialogUtils;
@@ -148,7 +149,7 @@ public class ImageListActivity extends AppCompatActivity {
                 try {
                     // place where to store camera taken picture
                     photo = FileUtils.createTemporaryFile("picture", ".jpg");
-                    photo.delete();
+                    //photo.delete();
                 } catch (Exception e) {
                     Log.v(TAG, "Can't create file to take picture!");
                     Toast.makeText(getApplicationContext(), "Please check SD card. Image shot is impossible",

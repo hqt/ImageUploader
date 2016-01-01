@@ -7,6 +7,9 @@ import android.util.Log;
 
 import java.io.File;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 /**
  * Created by Huynh Quang Thao on 12/30/15.
  */
@@ -21,10 +24,12 @@ public class UploaderApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //JodaTimeAndroid.init(this);
         mContext = getApplicationContext();
 
-        //PrefStore.setIsMapDownloaded(false);
+        // build realm default configuration
+        RealmConfiguration config = new RealmConfiguration.Builder(mContext).build();
+        Realm.setDefaultConfiguration(config);
+
     }
 
     protected void attachBaseContext(Context base) {

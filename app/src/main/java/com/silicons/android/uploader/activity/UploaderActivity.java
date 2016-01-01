@@ -16,7 +16,11 @@ import com.silicons.android.uploader.utils.FileUtils;
 import com.silicons.android.uploader.widgets.TouchImageView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * preview and upload image screen
@@ -26,6 +30,9 @@ public class UploaderActivity extends AppCompatActivity {
 
     private TouchImageView mImageView;
     private ImageButton mUploadButton;
+
+    // uri for image
+    private Uri mUri;
 
     // file name for image
     private String mFileName;
@@ -48,8 +55,8 @@ public class UploaderActivity extends AppCompatActivity {
         String uriStr = extras.getString("uri_photo_gallery");
         String cameraPhotoPath = extras.getString("camera_photo_path");
         if (uriStr != null) {
-            Uri uri = Uri.parse(uriStr);
-            parseImageFromUri(uri);
+            mUri = Uri.parse(uriStr);
+            parseImageFromUri(mUri);
         } else if (cameraPhotoPath != null) {
             parseImageFromPath(cameraPhotoPath);
         }
@@ -57,10 +64,27 @@ public class UploaderActivity extends AppCompatActivity {
         mUploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                mBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
+                //ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                //mBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
                 byte[] data = FileUtils.convertBitmaptoByte(mBitmap);
-                PhotoUploadTask task = new PhotoUploadTask(UploaderActivity.this, mFileName, data, mUploadMetaData);
+
+                String extension = FileUtils.getExtension(media);
+                if (unsupportedExtensions.contains(extension)) {
+                    throw new UploadException("Unsupported extension: " + extension, false);
+                }
+                String uri = media.getPath();
+                File file = new File(uri);
+                if (!file.exists()) {
+                    throw new UploadException("File no longer exists: " + file.getAbsolutePath(), false);
+                }
+                if (file.length() <= 10) {
+                    throw new UploadException("File is empty: " + file.getAbsolutePath(), false);
+                }
+                if (file.length() > 1024 * 1024 * 1024L) {
+                    throw new UploadException("File too big: " + file.getAbsolutePath(), false);
+                }
+
+                PhotoUploadTask task = new PhotoUploadTask(UploaderActivity.this, mFileName, data, mUri, mUploadMetaData);
                 task.execute();
 
             }
@@ -71,7 +95,7 @@ public class UploaderActivity extends AppCompatActivity {
         try {
             mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
             //String filePath = FileUtils.getRealPathFromURI(uri);
-            //setPic(filePath);
+            //setPic();
 
             mFileName = FileUtils.getImageNameFromUri(uri);
             mUploadMetaData = new UploadMetaData();
@@ -96,38 +120,49 @@ public class UploaderActivity extends AppCompatActivity {
         mImageView.setImageBitmap(mBitmap);
     }
 
-    private void setPic(String path) {
+    byte[] data;
 
-		/* There isn't enough memory to open up more than a couple camera photos */
-		/* So pre-scale the target bitmap into which the file is decoded */
+    private void setPic() {
 
-		/* Get the size of the ImageView */
+        /*mImageView.setImageBitmap(mBitmap);
+        Bitmap result = Bitmap.createScaledBitmap(mBitmap,
+                mImageView.getWidth(), mImageView.getHeight(), false);
+        mImageView.setImageBitmap(result);
+        mBitmap = result;*/
+
+        data = FileUtils.convertBitmaptoByte(mBitmap);
+
+		 // There isn't enough memory to open up more than a couple camera photos
+		 // So pre-scale the target bitmap into which the file is decoded
+
+		 // Get the size of the ImageView
         int targetW = mImageView.getWidth();
         int targetH = mImageView.getHeight();
 
-		/* Get the size of the image */
+		 // Get the size of the image
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, bmOptions);
+        BitmapFactory.decodeByteArray(data, 0, data.length, bmOptions);
+        // BitmapFactory.decodeFile(path, bmOptions);
 
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
-		/* Figure out which way needs to be reduced less */
+		//  Figure out which way needs to be reduced less
         int scaleFactor = 1;
         if ((targetW > 0) || (targetH > 0)) {
             scaleFactor = Math.min(photoW/targetW, photoH/targetH);
         }
 
-		/* Set bitmap options to scale the image decode target */
+		// Set bitmap options to scale the image decode target
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
 
-		/* Decode the JPEG file into a Bitmap */
-        mBitmap = BitmapFactory.decodeFile(path, bmOptions);
+        // Decode the JPEG file into a Bitmap
+        mBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, bmOptions);
 
-		/* Associate the Bitmap to the ImageView */
+		// Associate the Bitmap to the ImageView
         mImageView.setImageBitmap(mBitmap);
     }
 }

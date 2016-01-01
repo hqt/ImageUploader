@@ -3,6 +3,7 @@ package com.silicons.android.uploader.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -12,6 +13,7 @@ import android.support.v4.util.Pair;
 import android.util.Log;
 
 import com.silicons.android.uploader.config.UploaderApplication;
+import com.silicons.android.uploader.uploader.model.PhotoItem;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 
@@ -116,13 +119,25 @@ public class FileUtils {
 
     public static byte[] convertBitmaptoByte(Bitmap bitmap) {
         //calculate how many bytes our image consists of.
-        int bytes = bitmap.getByteCount();
+        int bytes = byteSizeOf(bitmap);
 
         ByteBuffer buffer = ByteBuffer.allocate(bytes); //Create a new buffer
         bitmap.copyPixelsToBuffer(buffer); //Move the byte data to the buffer
 
         //Get the underlying array containing the data.
         return buffer.array();
+    }
+
+    protected static int byteSizeOf(Bitmap data) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1) {
+            return data.getRowBytes() * data.getHeight();
+        }
+        else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return data.getByteCount();
+        }
+        else {
+            return data.getAllocationByteCount();
+        }
     }
 
     public static String getImageNameFromUri(Uri uri) {
@@ -163,5 +178,19 @@ public class FileUtils {
             }
         }
     }
+
+    public static String getExtension(PhotoItem item) {
+        try {
+            File file = new File(item.getPath());
+            int lastIndexOf = file.getName().lastIndexOf('.');
+            if (lastIndexOf > 0) {
+                return file.getName().substring(lastIndexOf + 1).trim().toLowerCase(Locale.US);
+            }
+        } catch (Exception e1) {
+            Log.e(TAG, e1.getClass().getSimpleName() + " : " + e1.getMessage());
+        }
+        return null;
+    }
+
 
 }

@@ -89,7 +89,6 @@ public class UserAuthTask extends AsyncTask<Void, Integer, OAuth> {
                         Toast.LENGTH_LONG).show();
                 return;
             }
-
             Log.e(TAG, "Saving user " + user);
             FlickrOath.saveAuthInformation(result);
 

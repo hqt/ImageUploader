@@ -61,7 +61,7 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
             PrefStore.setFlickrSecret(oauthToken.getOauthTokenSecret());
 
             URL oauthUrl = flickr.getOAuthInterface().buildAuthenticationUrl(
-                    Permission.WRITE, oauthToken);
+                    Permission.DELETE, oauthToken);
             return oauthUrl.toString();
         } catch (Exception e) {
             Log.e(TAG, "Error to oauth: " + e);
