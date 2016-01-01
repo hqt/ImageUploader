@@ -26,6 +26,9 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.adapter.PhotoPagerAdapter;
+import com.silicons.android.uploader.config.AppConstant;
+import com.silicons.android.uploader.config.PrefStore;
+import com.silicons.android.uploader.dal.PhotoItemDAL;
 import com.silicons.android.uploader.fragment.FailUploadFragment;
 import com.silicons.android.uploader.fragment.QueuePhotoFragment;
 import com.silicons.android.uploader.fragment.UploadedPhotoFragment;
@@ -85,13 +88,6 @@ public class ImageListActivity extends AppCompatActivity
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
-        mGeneralFloatingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, "Hello Snackbar", Snackbar.LENGTH_LONG).show();
-            }
-        });
-
         // Set up tab view
         PhotoPagerAdapter adapter = new PhotoPagerAdapter(getSupportFragmentManager(), this);
         mViewPager.setAdapter(adapter);
@@ -105,22 +101,7 @@ public class ImageListActivity extends AppCompatActivity
         }
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+        mTabLayout.setOnTabSelectedListener(mTabSelectedListener);
 
         // event for selecting photo from library
         mPhotoUploadButton.setOnClickListener(mPhotoSelectClickListener);
@@ -137,7 +118,7 @@ public class ImageListActivity extends AppCompatActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK) {
+        if ((resultCode != Activity.RESULT_OK) && (resultCode != Activity.RESULT_CANCELED)) {
             Toast.makeText(getApplicationContext(), "Something is wrong. Please try again",
                     Toast.LENGTH_SHORT).show();
             return;
@@ -247,6 +228,16 @@ public class ImageListActivity extends AppCompatActivity
                                 @Override
                                 public void onClick(DialogInterface dialog, int id) {
                                     FlickrOath.logout();
+                                    PhotoItemDAL.deleteAllPhotos();
+
+                                    if (PrefStore.getIsPrivacy()) {
+                                        PrefStore.setMobileNetwork(true);
+                                        PrefStore.setPrivacyData(true);
+                                        PrefStore.setFailSortType(0);
+                                        PrefStore.setUploadSortType(0);
+                                        PrefStore.setProviderMode(ImageProviderMode.FLICKR);
+                                    }
+
                                     Intent intent = new Intent(ImageListActivity.this,
                                             LoginActivity.class);
                                     startActivity(intent);
@@ -265,6 +256,23 @@ public class ImageListActivity extends AppCompatActivity
                 default:
                     return true;
             }
+        }
+    };
+
+    private TabLayout.OnTabSelectedListener mTabSelectedListener = new TabLayout.OnTabSelectedListener() {
+        @Override
+        public void onTabSelected(TabLayout.Tab tab) {
+            mViewPager.setCurrentItem(tab.getPosition());
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab) {
+
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+
         }
     };
     //endregion

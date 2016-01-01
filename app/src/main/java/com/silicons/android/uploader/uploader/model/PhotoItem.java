@@ -1,5 +1,8 @@
 package com.silicons.android.uploader.uploader.model;
 
+import com.silicons.android.uploader.config.AppConstant;
+import com.silicons.android.uploader.config.AppConstant.PhotoStatus;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
@@ -28,14 +31,33 @@ public class PhotoItem extends RealmObject implements Serializable {
 
     private int status;
 
+    public long getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(long timeCreated) {
+        this.timeCreated = timeCreated;
+    }
+
+    private long timeCreated;
+
     private String path;
+
+    public PhotoItem() {
+
+    }
 
     public String getFlickrId() {
         return flickrId;
     }
 
     public void setFlickrId(String flickrId) {
-        this.flickrId = flickrId;
+        if ((flickrId != null) && (flickrId.length() > 0)) {
+            this.flickrId = flickrId;
+            setStatus(PhotoStatus.UPLOADED);
+        } else {
+            flickrId = null;
+        }
     }
 
     public String getFlickrSetTitle() {

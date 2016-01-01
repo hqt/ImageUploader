@@ -5,7 +5,7 @@ import android.net.Uri;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
+/** contain all application app constants
  * Created by Huynh Quang Thao on 12/30/15.
  */
 public class AppConstant {
@@ -38,12 +38,10 @@ public class AppConstant {
         public static final int TAKE_CAMERA_INTENT = 101;
     }
 
-    public static class FlickrService {
-        public static final String FLICKR_BASE_URL = "http://api.flickr.com/services/rest/?method=";
-        private static final String FLICKR_PHOTOS_SEARCH_STRING = "flickr.photos.search";
-        private static final String FLICKR_GET_SIZES_STRING = "flickr.photos.getSizes";
-        private static final int FLICKR_PHOTOS_SEARCH_ID = 1;
-        private static final int FLICKR_GET_SIZES_ID = 2;
-        private static final int NUMBER_OF_PHOTOS = 20;
+    public static class PhotoStatus {
+        public static final int QUEUED = 0;
+        public static final int UPLOADED = 1;
+        public static final int FAILED = 2;
     }
+
 }
