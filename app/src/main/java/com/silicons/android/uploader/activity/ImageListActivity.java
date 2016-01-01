@@ -62,7 +62,7 @@ public class ImageListActivity extends AppCompatActivity
 
 
     // store photo path from camera
-    private String mCurrentPhotoPath;
+    private String mPhotoPath;
 
     // Uri for picture
     private Uri mImageUri;
@@ -142,9 +142,9 @@ public class ImageListActivity extends AppCompatActivity
 
         // processing for getting photo from camera
         else if (requestCode == IntentCode.TAKE_CAMERA_INTENT) {
-            Log.e(TAG, "Camera: " + mImageUri.toString());
+            Log.e(TAG, "Camera: " + mPhotoPath);
             Intent intent = new Intent(this, UploaderActivity.class);
-            intent.putExtra("uri_photo_gallery", mImageUri.toString());
+            intent.putExtra("photo_camera_path", mPhotoPath);
             startActivity(intent);
         }
     }
@@ -186,6 +186,7 @@ public class ImageListActivity extends AppCompatActivity
                 try {
                     // place where to store camera taken picture
                     photo = FileUtils.createTemporaryFile("picture", ".jpg");
+                    mPhotoPath = photo.getPath();
                     //photo.delete();
                 } catch (Exception e) {
                     Log.v(TAG, "Can't create file to take picture!");
@@ -194,7 +195,6 @@ public class ImageListActivity extends AppCompatActivity
                 }
 
                 if (photo != null) {
-                    mImageUri = Uri.fromFile(photo);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
                     startActivityForResult(takePictureIntent, IntentCode.TAKE_CAMERA_INTENT);
                 }

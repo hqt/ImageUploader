@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
 
+import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.config.UploaderApplication;
 
 import java.io.BufferedInputStream;
@@ -32,7 +33,7 @@ public class NetworkUtils {
      * "http://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html"
      * >Android Developer</a>} Using to detect network on Android Device if Wifi | 3G -> can synchronize data
      */
-    public static boolean isNetworkConnected() {
+    private static boolean isNetworkConnected() {
         Context ctx = UploaderApplication.getAppContext();
         ConnectivityManager connectivityManager = (ConnectivityManager) ctx
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -58,7 +59,7 @@ public class NetworkUtils {
     /**
      * wifi connect or not (not including 3G)
      */
-    public static boolean isWifiConnect() {
+    private static boolean isWifiConnect() {
         Context ctx = UploaderApplication.getAppContext();
         ConnectivityManager connectivityManager = (ConnectivityManager) ctx
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -71,6 +72,15 @@ public class NetworkUtils {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public static boolean isNetworkAvailable() {
+        Context ctx = UploaderApplication.getAppContext();
+        if (PrefStore.getIsMobileNetwork()) {
+            return isNetworkConnected();
+        } else {
+            return isWifiConnect();
         }
     }
 

@@ -1,20 +1,14 @@
 package com.silicons.android.uploader.uploader.model;
 
-import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.AppConstant.PhotoStatus;
 
-import java.io.File;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 
-/**
+/** Model for Photo for persistent to database
  * Created by Huynh Quang Thao on 1/1/16.
  */
 public class PhotoItem extends RealmObject implements Serializable {
@@ -25,11 +19,17 @@ public class PhotoItem extends RealmObject implements Serializable {
 
     private String flickrId;
 
-    private String flickrSetTitle;
+    private String flickrTitle;
+
+    private String path;
+
+    private long timeCreated;
 
     private int retries;
 
     private int status;
+
+    private int size;
 
     public long getTimeCreated() {
         return timeCreated;
@@ -39,12 +39,18 @@ public class PhotoItem extends RealmObject implements Serializable {
         this.timeCreated = timeCreated;
     }
 
-    private long timeCreated;
 
-    private String path;
 
     public PhotoItem() {
 
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public String getFlickrId() {
@@ -60,12 +66,12 @@ public class PhotoItem extends RealmObject implements Serializable {
         }
     }
 
-    public String getFlickrSetTitle() {
-        return flickrSetTitle;
+    public String getFlickrTitle() {
+        return flickrTitle;
     }
 
-    public void setFlickrSetTitle(String flickrSetTitle) {
-        this.flickrSetTitle = flickrSetTitle;
+    public void setFlickrTitle(String flickrTitle) {
+        this.flickrTitle = flickrTitle;
     }
 
     public int getId() {

@@ -46,12 +46,13 @@ Application for uploading images to Flickr Service. This application is for Sili
   </tr>
 </table>
 
-# Technologies
-- Server: Java Servlet, Hibernate, MySQL, Redis
-- Algorithm: <a href="http://research.microsoft.com/pubs/156567/raptor_alenex.pdf">Raptor algorithm (Microsoft, 2012)</a>
-- Android Development
-    - Material Layout implementation
-    - <a href="http://www.nutiteq.com/apps/offline-maps-3d/">Nutiteq Map Offline technology</a>
-    - GPS Technology
-    - Google Direction API, Google Map API, Google Autocomplete API
-- Android Wear Development
+# Libraries
+- **Flikrj-android:** Flickr Restful API Wrapper for Android.
+- **EventBus:** Using for transfer data between activity and activity, activity and service ...
+- **Realm:** Mobile ORM Database, supports many platforms such as Android, iOS .. and is proved faster than normal SQLite Database
+- **Material libraries:** libraries for implementing Google material design guideline.
+
+# Testing
+
+# Extend
+My application provided for extending to other Photo Uploading Service by infrastructure decoupling between Activities (View) and other actions.

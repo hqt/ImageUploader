@@ -6,21 +6,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.googlecode.flickrjandroid.uploader.UploadMetaData;
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.task.flickr.PhotoUploadTask;
+import com.silicons.android.uploader.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.FileUtils;
 import com.silicons.android.uploader.widgets.TouchImageView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * preview and upload image screen
@@ -43,6 +41,9 @@ public class UploaderActivity extends AppCompatActivity {
     // meta data for image. based on from photo gallery or from camera
     private UploadMetaData mUploadMetaData;
 
+    // PhotoItem. used for persistence to database
+    private PhotoItem mPhotoItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,7 @@ public class UploaderActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         String uriStr = extras.getString("uri_photo_gallery");
-        String cameraPhotoPath = extras.getString("camera_photo_path");
+        String cameraPhotoPath = extras.getString("photo_camera_path");
         if (uriStr != null) {
             mUri = Uri.parse(uriStr);
             parseImageFromUri(mUri);
@@ -93,11 +94,18 @@ public class UploaderActivity extends AppCompatActivity {
 
     private void parseImageFromUri(Uri uri) {
         try {
-            mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-            //String filePath = FileUtils.getRealPathFromURI(uri);
-            //setPic();
+            mPhotoItem = new PhotoItem();
 
+            mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+            String filePath = FileUtils.getRealPathFromURI(uri);
             mFileName = FileUtils.getImageNameFromUri(uri);
+
+            // create information for photo item
+            mPhotoItem.setPath(filePath);
+            mPhotoItem.setSize(mBitmap.getByteCount());
+            mPhotoItem.setFlickrTitle(mFileName);
+
+            // create information for meta data
             mUploadMetaData = new UploadMetaData();
             mUploadMetaData.setDescription("Image from photo gallery");
             mUploadMetaData.setTitle("Image from photo gallery");
@@ -109,10 +117,19 @@ public class UploaderActivity extends AppCompatActivity {
     }
 
     private void parseImageFromPath(String path) {
+        mPhotoItem = new PhotoItem();
+
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         mBitmap = BitmapFactory.decodeFile(path, bmOptions);
+        mFileName = new File(path).getName();
+        Log.e("hqthao", "file name: " + mFileName);
 
-        mFileName = "Camera_Upload.jpg";
+        // create information for photo item
+        mPhotoItem.setPath(path);
+        mPhotoItem.setSize(mBitmap.getByteCount());
+        mPhotoItem.setFlickrTitle(mFileName);
+
+        // create information for meta data
         mUploadMetaData = new UploadMetaData();
         mUploadMetaData.setDescription("Screenshot from camera");
         mUploadMetaData.setTitle("Screenshot from camera");

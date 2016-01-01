@@ -1,14 +1,11 @@
 package com.silicons.android.uploader.dal;
 
-import android.provider.ContactsContract;
-
 import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
@@ -79,7 +76,7 @@ public class PhotoItemDAL {
             return new Comparator<PhotoItem>() {
                 @Override
                 public int compare(PhotoItem lhs, PhotoItem rhs) {
-                    return lhs.getFlickrSetTitle().compareTo(rhs.getFlickrSetTitle());
+                    return lhs.getFlickrTitle().compareTo(rhs.getFlickrTitle());
                 }
             };
         }
@@ -100,7 +97,7 @@ public class PhotoItemDAL {
             return new Comparator<PhotoItem>() {
                 @Override
                 public int compare(PhotoItem lhs, PhotoItem rhs) {
-                    return lhs.getFlickrSetTitle().compareTo(rhs.getFlickrSetTitle());
+                    return lhs.getFlickrTitle().compareTo(rhs.getFlickrTitle());
                 }
             };
         }
