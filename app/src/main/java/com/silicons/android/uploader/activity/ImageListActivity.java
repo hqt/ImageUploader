@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.adapter.PhotoPagerAdapter;
 import com.silicons.android.uploader.fragment.FailUploadFragment;
@@ -49,6 +51,7 @@ public class ImageListActivity extends AppCompatActivity
 
     private FloatingActionButton mPhotoUploadButton;
     private FloatingActionButton mCameraUploadButton;
+    private FloatingActionsMenu mGeneralFloatingButton;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private TabLayout mTabLayout;
@@ -76,10 +79,18 @@ public class ImageListActivity extends AppCompatActivity
 
         mPhotoUploadButton = (FloatingActionButton) findViewById(R.id.fab_photos);
         mCameraUploadButton = (FloatingActionButton) findViewById(R.id.fab_camera);
+        mGeneralFloatingButton = (FloatingActionsMenu) findViewById(R.id.fab_menu);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
+        mGeneralFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, "Hello Snackbar", Snackbar.LENGTH_LONG).show();
+            }
+        });
 
         // Set up tab view
         PhotoPagerAdapter adapter = new PhotoPagerAdapter(getSupportFragmentManager(), this);
@@ -119,6 +130,8 @@ public class ImageListActivity extends AppCompatActivity
 
         // event for select item in navigation drawer menu
         mNavigationView.setNavigationItemSelectedListener(mNavigationItemListener);
+
+        mDrawerLayout.openDrawer(GravityCompat.START);
     }
 
     @Override

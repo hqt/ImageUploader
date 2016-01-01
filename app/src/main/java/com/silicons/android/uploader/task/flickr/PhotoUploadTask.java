@@ -139,6 +139,7 @@ public class PhotoUploadTask extends AsyncTask<Void, Void, String> {
             return;
         }
 
+        Log.e(TAG, "Image Id: " + result);
         // open again image list activity
         Intent intent = new Intent(mContext, ImageListActivity.class);
         mContext.startActivity(intent);
