@@ -3,4 +3,10 @@
     <string name="action_settings">Settings</string>
     <string name="setting">Setting</string>
     <string name="logout">Log out</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="upload_photo_tab">Uploaded</string>
+    <string name="queue_photo_tab">Queued</string>
+    <string name="fail_upload_photo_tab">Failed</string>
 </resources>

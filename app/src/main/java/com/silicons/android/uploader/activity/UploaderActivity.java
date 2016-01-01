@@ -68,7 +68,7 @@ public class UploaderActivity extends AppCompatActivity {
                 //mBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
                 byte[] data = FileUtils.convertBitmaptoByte(mBitmap);
 
-                String extension = FileUtils.getExtension(media);
+                /*String extension = FileUtils.getExtension(media);
                 if (unsupportedExtensions.contains(extension)) {
                     throw new UploadException("Unsupported extension: " + extension, false);
                 }
@@ -82,7 +82,7 @@ public class UploaderActivity extends AppCompatActivity {
                 }
                 if (file.length() > 1024 * 1024 * 1024L) {
                     throw new UploadException("File too big: " + file.getAbsolutePath(), false);
-                }
+                }*/
 
                 PhotoUploadTask task = new PhotoUploadTask(UploaderActivity.this, mFileName, data, mUri, mUploadMetaData);
                 task.execute();

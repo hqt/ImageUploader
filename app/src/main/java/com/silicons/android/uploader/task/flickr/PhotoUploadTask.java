@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.googlecode.flickrjandroid.Flickr;
 import com.googlecode.flickrjandroid.FlickrException;
+import com.googlecode.flickrjandroid.photos.Photo;
 import com.googlecode.flickrjandroid.uploader.UploadMetaData;
 import com.googlecode.flickrjandroid.uploader.Uploader;
 import com.silicons.android.uploader.activity.ImageListActivity;
@@ -72,7 +73,6 @@ public class PhotoUploadTask extends AsyncTask<Void, Void, String> {
         Flickr flickr = FlickrHelper.getInstance()
                 .getFlickrAuthed(PrefStore.getFlickrToken(), PrefStore.getFlickTokenSecret());
 
-
         UploadMetaData uploadMetaData = new UploadMetaData();
         uploadMetaData.setTitle("" + "thao");
         uploadMetaData.setDescription("Here is Image Descrtion.");
@@ -92,6 +92,7 @@ public class PhotoUploadTask extends AsyncTask<Void, Void, String> {
         String path = FileUtils.getRealPathFromURI(mUri);
         File f = new File(path);
         FileInputStream fis = null;
+
         try {
             fis = new FileInputStream(f);
             return flickr. getUploader().upload("aa.jpg",
