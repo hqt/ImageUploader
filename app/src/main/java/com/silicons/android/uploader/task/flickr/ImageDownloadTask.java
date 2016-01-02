@@ -1,21 +1,24 @@
-/*
 package com.silicons.android.uploader.task.flickr;
 
-*/
-/**
- * Created by Huynh Quang Thao on 1/2/16.
- *//*
 
-
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.googlecode.flickrjandroid.Flickr;
+import com.googlecode.flickrjandroid.photos.Photo;
+import com.googlecode.flickrjandroid.photos.PhotosInterface;
+import com.googlecode.flickrjandroid.photosets.Photoset;
 import com.googlecode.flickrjandroid.photosets.PhotosetsInterface;
+import com.silicons.android.uploader.config.AppConstant;
+import com.silicons.android.uploader.config.AppConstant.PhotoType;
 import com.silicons.android.uploader.uploader.manager.FlickrHelper;
+import com.silicons.android.uploader.utils.FileUtils;
+import com.silicons.android.uploader.utils.NetworkUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,117 +27,64 @@ import java.lang.ref.WeakReference;
 
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 
-*/
 /**
  * Represents the image download task which takes an image url as the parameter,
  * after the download, set the bitmap to an associated ImageView.
  * Using WeakReference pattern because we don't know this image view will be GC in future
  * Created by Huynh Quang Thao on 1/2/16.
- *//*
+ */
 
-public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
+public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
 
     private static final String TAG = makeLogTag(ImageDownloadTask.class);
 
     private WeakReference<ImageView> imgRef = null;
-    private String mUrl;
 
-    */
-/**
-     * The photo secret
-     *//*
+    // flickr id server
+    private String mPhotoId;
 
-    private String mPhotoSecret = null;
+    // photo type for downloading
+    private int mPhotoType;
 
-    public static enum ParamType {
-        PHOTO_URL, PHOTO_ID_SMALL, PHOTO_ID_SMALL_SQUARE, PHOTO_ID_MEDIUM, PHOTO_ID_LARGE, PHOTO_SET_ID, PHOTO_POOL_ID
-    }
-
-    */
-/**
-     * The parameter type to say whether the passed in parameter is the url, or
-     * just photo id.
-     *//*
-
-    private ParamType mParamType = ParamType.PHOTO_URL;
-
-    */
-/**
-     * The image downloaded listener.
-     *//*
-
-    private IImageDownloadDoneListener mImageDownloadedListener;
-
-    public ImageDownloadTask(ImageView imageView) {
-        this(imageView, ParamType.PHOTO_URL, null);
-    }
-
-    public ImageDownloadTask(ImageView imageView, ParamType paramType) {
-        this(imageView, paramType, null);
-    }
-
-    public ImageDownloadTask(ImageView imageView, ParamType paramType,
-                             IImageDownloadDoneListener listener) {
+    public ImageDownloadTask(ImageView imageView, String photoId, int photoType) {
         this.imgRef = new WeakReference<ImageView>(imageView);
-        this.mParamType = paramType;
-        this.mImageDownloadedListener = listener;
+        this.mPhotoId = photoId;
+        this.mPhotoType = photoType;
     }
 
     @Override
-    protected Bitmap doInBackground(String... params) {
-        mUrl = params[0];
-        if( params.length > 1 ) {
-            mPhotoSecret = params[1];
-        }
-        String url = mUrl;
-        Flickr f = FlickrHelper.getInstance().getFlickr();
-        if (ParamType.PHOTO_SET_ID.equals(mParamType)) {
-            String photoSetId = mUrl;
-            PhotosetsInterface psi = f.getPhotosetsInterface();
-            try {
-                Photoset ps = psi.getInfo(photoSetId);
-                url = ps.getPrimaryPhoto().getSmallSquareUrl();
-            } catch (Exception e) {
-                return null;
-            }
-        } else if (ParamType.PHOTO_POOL_ID.equals(mParamType)) {
-            String photoPoolId = mUrl;
-            GroupsInterface gi = f.getGroupsInterface();
-            try {
-                Group photoGroup = gi.getInfo(photoPoolId);
-                url = photoGroup.getBuddyIconUrl();
-            } catch (Exception e) {
-                return null;
-            }
-        } else if (!mParamType.equals(ParamType.PHOTO_URL)) {
-            PhotosInterface pi = f.getPhotosInterface();
-            try {
-                Photo photo = pi.getPhoto(mUrl, mPhotoSecret);
-                switch (mParamType) {
-                    case PHOTO_ID_SMALL_SQUARE:
-                        url = photo.getSmallSquareUrl();
-                        break;
-                    case PHOTO_ID_LARGE:
-                        url = photo.getLargeUrl();
-                        break;
-                    case PHOTO_ID_SMALL:
-                        url = photo.getSmallUrl();
-                        break;
-                    case PHOTO_ID_MEDIUM:
-                        url = photo.getMediumUrl();
-                    default:
-                        break;
-                }
+    protected Bitmap doInBackground(Void... params) {
+        Flickr flikcr = FlickrHelper.getInstance().getFlickr();
+        PhotosInterface photoService = flikcr.getPhotosInterface();
+        Photo photo = null;
+        String url = null;
 
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                return null;
-            }
+        switch (mPhotoType) {
+            case PhotoType.PHOTO_ID_SMALL_SQUARE:
+                url = photo.getSmallSquareUrl();
+                break;
+            case PhotoType.PHOTO_ID_SMALL:
+                url = photo.getSmallUrl();
+                break;
+            case PhotoType.PHOTO_ID_MEDIUM:
+                url = photo.getMediumUrl();
+                break;
+            case PhotoType.PHOTO_ID_LARGE:
+                url = photo.getLargeUrl();
+                break;
         }
+
         if (url == null) {
             return null;
         }
-        return ImageUtils.downloadImage(url);
+
+        byte[] data = NetworkUtils.downloadSoundFile(url);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inMutable = true;
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+
+        return bitmap;
+
     }
 
     @Override
@@ -144,52 +94,28 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
             return;
         }
 
-        ImageCache.saveToCache(mUrl, result);
+        // ImageCache.saveToCache(mUrl, result);
+
         if (imgRef != null) {
             ImageView imageView = imgRef.get();
             ImageDownloadTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
             // Change bitmap only if this process is still associated with it
             // Or if we don't use any bitmap to task association
             // (NO_DOWNLOADED_DRAWABLE mode)
-            if (this == bitmapDownloaderTask && bitmapDownloaderTask != null ) {
+            if (this == bitmapDownloaderTask && bitmapDownloaderTask != null) {
                 imageView.setImageBitmap(result);
             }
         }
-
-        if (mImageDownloadedListener != null) {
-            mImageDownloadedListener.onImageDownloaded(result);
-        }
     }
-
-    */
-/**
-     * This method name should be changed later, for sometimes, it will return
-     * photo id.
-     *
-     * @return
-     *//*
-
-    public String getUrl() {
-        return mUrl;
-    }
-
-    */
-/**
-     * @param imageView
-     *            Any imageView
-     * @return Retrieve the currently active download task (if any) associated
-     *         with this imageView. null if there is no such task.
-     *//*
 
     private ImageDownloadTask getBitmapDownloaderTask(ImageView imageView) {
-        if (imageView != null) {
+       /* if (imageView != null) {
             Drawable drawable = imageView.getDrawable();
             if (drawable instanceof DownloadedDrawable) {
                 DownloadedDrawable downloadedDrawable = (DownloadedDrawable) drawable;
                 return downloadedDrawable.getBitmapDownloaderTask();
             }
-        }
+        }*/
         return null;
     }
 }
-*/

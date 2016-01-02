@@ -44,4 +44,14 @@ public class AppConstant {
         public static final int FAILED = 2;
     }
 
+    public static class PhotoType {
+        public static final int PHOTO_URL = 0;
+        public static final int PHOTO_ID_SMALL = 1;
+        public static final int PHOTO_ID_SMALL_SQUARE = 2;
+        public static final int PHOTO_ID_MEDIUM = 3;
+        public static final int PHOTO_ID_LARGE = 4;
+        public static final int PHOTO_SET_ID = 5;
+        public static final int PHOTO_POOL_ID = 6;
+    }
+
 }

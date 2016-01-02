@@ -112,7 +112,6 @@ public class ImageListActivity extends AppCompatActivity
         // event for select item in navigation drawer menu
         mNavigationView.setNavigationItemSelectedListener(mNavigationItemListener);
 
-        mDrawerLayout.openDrawer(GravityCompat.START);
     }
 
     @Override
