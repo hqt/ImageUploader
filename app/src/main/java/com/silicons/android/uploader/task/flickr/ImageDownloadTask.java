@@ -1,7 +1,9 @@
 package com.silicons.android.uploader.task.flickr;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -10,19 +12,23 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.googlecode.flickrjandroid.Flickr;
+import com.googlecode.flickrjandroid.FlickrException;
 import com.googlecode.flickrjandroid.photos.Photo;
 import com.googlecode.flickrjandroid.photos.PhotosInterface;
 import com.googlecode.flickrjandroid.photosets.Photoset;
 import com.googlecode.flickrjandroid.photosets.PhotosetsInterface;
 import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.AppConstant.PhotoType;
+import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.uploader.manager.FlickrHelper;
 import com.silicons.android.uploader.utils.FileUtils;
 import com.silicons.android.uploader.utils.NetworkUtils;
 
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
@@ -40,25 +46,62 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
 
     private WeakReference<ImageView> imgRef = null;
 
+    private ProgressDialog mProgressDialog;
+
+    private Context mContext;
+
     // flickr id server
     private String mPhotoId;
 
     // photo type for downloading
     private int mPhotoType;
 
-    public ImageDownloadTask(ImageView imageView, String photoId, int photoType) {
+    // should display progress to ui or not
+    private boolean mIsDisplayProgress;
+
+    public ImageDownloadTask(Context context, ImageView imageView, String photoId,
+                             int photoType, boolean displayProgress) {
+        this.mContext = context;
         this.imgRef = new WeakReference<ImageView>(imageView);
         this.mPhotoId = photoId;
         this.mPhotoType = photoType;
+        this.mIsDisplayProgress = displayProgress;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (!mIsDisplayProgress) {
+            return;
+        }
+        mProgressDialog = ProgressDialog.show(mContext, "Login", "Step 1 Login from Flickr ...");
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dlg) {
+                ImageDownloadTask.this.cancel(true);
+            }
+        });
     }
 
     @Override
     protected Bitmap doInBackground(Void... params) {
         Flickr flikcr = FlickrHelper.getInstance().getFlickr();
         PhotosInterface photoService = flikcr.getPhotosInterface();
-        Photo photo = null;
-        String url = null;
 
+        Photo photo = null;
+        try {
+            photo = photoService.getPhoto(mPhotoId, PrefStore.getFlickTokenSecret());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (FlickrException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = null;
         switch (mPhotoType) {
             case PhotoType.PHOTO_ID_SMALL_SQUARE:
                 url = photo.getSmallSquareUrl();
@@ -78,6 +121,8 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
             return null;
         }
 
+        Log.e(TAG, "URL: " + url);
+
         byte[] data = NetworkUtils.downloadSoundFile(url);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable = true;
@@ -94,18 +139,26 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
             return;
         }
 
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+
         // ImageCache.saveToCache(mUrl, result);
 
-        if (imgRef != null) {
-            ImageView imageView = imgRef.get();
-            ImageDownloadTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
+        if (imgRef != null && result != null) {
+            final ImageView imageView = imgRef.get();
+            if (imageView != null) {
+                imageView.setImageBitmap(result);
+            }
+        }
+
+            /*ImageDownloadTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
             // Change bitmap only if this process is still associated with it
             // Or if we don't use any bitmap to task association
             // (NO_DOWNLOADED_DRAWABLE mode)
             if (this == bitmapDownloaderTask && bitmapDownloaderTask != null) {
                 imageView.setImageBitmap(result);
-            }
-        }
+            }*/
     }
 
     private ImageDownloadTask getBitmapDownloaderTask(ImageView imageView) {

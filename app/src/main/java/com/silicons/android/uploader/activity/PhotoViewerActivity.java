@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.silicons.android.uploader.R;
+import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.task.flickr.ImageDownloadTask;
 import com.silicons.android.uploader.widgets.TouchImageView;
 
@@ -39,6 +40,10 @@ public class PhotoViewerActivity extends AppCompatActivity {
 
         mImageView = (TouchImageView) findViewById(R.id.image_view);
 
+        ImageDownloadTask task = new ImageDownloadTask(this, mImageView, samplePhotoId,
+                AppConstant.PhotoType.PHOTO_ID_LARGE, true);
+        task.execute();
+
       /*  Intent intent = getIntent();
         mPhotoId = intent.getExtras().getString("photo_id");
         mPath = intent.getExtras().getString("photo_path");*/
@@ -50,13 +55,13 @@ public class PhotoViewerActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        File file = new File(mPath);
+        /*File file = new File(mPath);
         if (file.exists()) {
             // render image from local for saving bandwidth
         } else {
-           /* ImageDownloadTask task = new ImageDownloadTask();
-            task.execute();*/
-        }
+           *//* ImageDownloadTask task = new ImageDownloadTask();
+            task.execute();*//*
+        }*/
     }
 
 }
