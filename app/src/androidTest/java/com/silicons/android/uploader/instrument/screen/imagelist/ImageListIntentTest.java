@@ -23,6 +23,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasType;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static android.support.test.espresso.matcher.ViewMatchers.withChild;
@@ -35,7 +36,7 @@ import static org.hamcrest.Matchers.not;
  */
 @RunWith(AndroidJUnit4.class)
 @SmallTest
-public class IntentTest {
+public class ImageListIntentTest {
 
     @Rule
     public IntentsTestRule<ImageListActivity> mActivityRule = new IntentsTestRule<>(
@@ -49,7 +50,12 @@ public class IntentTest {
 
     @Test
     public void clickCameraButton() {
+        onView(withId(R.id.fab_menu)).perform(click());
+        onView(withId(R.id.fab_camera))
+                .perform(click());
 
+        // verify that send suitable intent to system.
+        intended(hasAction(MediaStore.ACTION_IMAGE_CAPTURE));
     }
 
     @Test
@@ -60,8 +66,8 @@ public class IntentTest {
 
         // verify that send suitable intent to system.
         intended(allOf(
-                hasAction(Intent.ACTION_GET_CONTENT)
-                //hasType("image/*")
+                hasAction(Intent.ACTION_GET_CONTENT),
+                hasType("image/*")
         ));
     }
 
