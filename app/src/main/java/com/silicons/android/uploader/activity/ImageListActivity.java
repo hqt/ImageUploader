@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -26,8 +24,8 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.adapter.PhotoPagerAdapter;
-import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.PrefStore;
+import com.silicons.android.uploader.config.UploaderApplication;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
 import com.silicons.android.uploader.fragment.FailUploadFragment;
 import com.silicons.android.uploader.fragment.QueuePhotoFragment;
@@ -87,6 +85,11 @@ public class ImageListActivity extends AppCompatActivity
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
+        if (PrefStore.isFirstRun()) {
+            Toast.makeText(this, "Temporary database will be created for demo.", Toast.LENGTH_LONG).show();
+            PrefStore.setFirstRun(false);
+        }
 
         // Set up tab view
         PhotoPagerAdapter adapter = new PhotoPagerAdapter(getSupportFragmentManager(), this);
@@ -228,6 +231,7 @@ public class ImageListActivity extends AppCompatActivity
                                 public void onClick(DialogInterface dialog, int id) {
                                     FlickrOath.logout();
                                     PhotoItemDAL.deleteAllPhotos();
+                                    PrefStore.setFirstRun(true) ;
 
                                     if (PrefStore.getIsPrivacy()) {
                                         PrefStore.setMobileNetwork(true);
@@ -235,6 +239,8 @@ public class ImageListActivity extends AppCompatActivity
                                         PrefStore.setFailSortType(0);
                                         PrefStore.setUploadSortType(0);
                                         PrefStore.setProviderMode(ImageProviderMode.FLICKR);
+                                        UploaderApplication.getImageDiskCache().clearCache();
+                                        UploaderApplication.getImageMemoryCache().clearCache();
                                     }
 
                                     Intent intent = new Intent(ImageListActivity.this,

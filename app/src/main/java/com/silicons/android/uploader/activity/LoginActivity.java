@@ -10,9 +10,14 @@ import android.widget.Button;
 
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.config.AppConstant;
+import com.silicons.android.uploader.config.Database;
 import com.silicons.android.uploader.config.PrefStore;
+import com.silicons.android.uploader.dal.PhotoItemDAL;
 import com.silicons.android.uploader.task.flickr.OAuthTask;
 import com.silicons.android.uploader.task.flickr.UserAuthTask;
+import com.silicons.android.uploader.uploader.model.PhotoItem;
+
+import java.util.List;
 
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 
@@ -28,6 +33,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (PrefStore.isFirstRun()) {
+            // create temporary database for demo purpose
+            // PrefStore.setFirstRun(false);
+            List<PhotoItem> photoItemList = Database.createDatabase();
+            for (PhotoItem photoItem : photoItemList) {
+                PhotoItemDAL.insertOrUpdatePhoto(photoItem);
+            }
+        }
 
         // if already login. switch to list activity
         if (PrefStore.isLogin()) {

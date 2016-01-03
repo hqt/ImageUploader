@@ -54,4 +54,10 @@ public class AppConstant {
         public static final int PHOTO_POOL_ID = 6;
     }
 
+    public static final class FileCache {
+        public static final String FOLDER_NAME = "image_cache";
+        public static final int FOLDER_SIZE = 10;
+        public static final int SYSTEM_SIZE = FOLDER_SIZE * 1024 * 1024;
+    }
+
 }

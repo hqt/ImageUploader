@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
@@ -14,19 +13,17 @@ import android.widget.ImageView;
 import com.googlecode.flickrjandroid.Flickr;
 import com.googlecode.flickrjandroid.FlickrException;
 import com.googlecode.flickrjandroid.photos.Photo;
+import com.googlecode.flickrjandroid.photos.PhotoList;
 import com.googlecode.flickrjandroid.photos.PhotosInterface;
-import com.googlecode.flickrjandroid.photosets.Photoset;
-import com.googlecode.flickrjandroid.photosets.PhotosetsInterface;
-import com.silicons.android.uploader.config.AppConstant;
+import com.googlecode.flickrjandroid.photos.SearchParameters;
 import com.silicons.android.uploader.config.AppConstant.PhotoType;
 import com.silicons.android.uploader.config.PrefStore;
+import com.silicons.android.uploader.config.UploaderApplication;
 import com.silicons.android.uploader.uploader.manager.FlickrHelper;
-import com.silicons.android.uploader.utils.FileUtils;
+import com.silicons.android.uploader.utils.ImageUtils;
 import com.silicons.android.uploader.utils.NetworkUtils;
 
 import org.json.JSONException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -44,7 +41,7 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
 
     private static final String TAG = makeLogTag(ImageDownloadTask.class);
 
-    private WeakReference<ImageView> imgRef = null;
+    private WeakReference<ImageView> mImageReference = null;
 
     private ProgressDialog mProgressDialog;
 
@@ -62,10 +59,15 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
     public ImageDownloadTask(Context context, ImageView imageView, String photoId,
                              int photoType, boolean displayProgress) {
         this.mContext = context;
-        this.imgRef = new WeakReference<ImageView>(imageView);
+        this.mImageReference = new WeakReference<ImageView>(imageView);
         this.mPhotoId = photoId;
         this.mPhotoType = photoType;
         this.mIsDisplayProgress = displayProgress;
+    }
+
+    // each task assign with each flickr server photo id. and this unique
+    public String getTaskId() {
+        return mPhotoId;
     }
 
     @Override
@@ -74,7 +76,7 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
         if (!mIsDisplayProgress) {
             return;
         }
-        mProgressDialog = ProgressDialog.show(mContext, "Login", "Step 1 Login from Flickr ...");
+        mProgressDialog = ProgressDialog.show(mContext, "Downloading", "Downloading photo from Flickr ...");
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.setCancelable(true);
         mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -121,6 +123,25 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
             return null;
         }
 
+        SearchParameters searchParameters = new SearchParameters();
+        searchParameters.setText("món ăn");
+        try {
+            PhotoList list = flikcr.getPhotosInterface().search(searchParameters, 100, 50);
+            for (int i = 0; i < list.size(); i++) {
+                Log.e(TAG, "id: " + list.get(i).getId() + "-" +
+                      //  list.get(i).getDatePosted().toString() + "-" +
+                        list.get(i).getTitle());
+            }
+
+            Log.e(TAG, "Size: " + list.size());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (FlickrException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         Log.e(TAG, "URL: " + url);
 
         byte[] data = NetworkUtils.downloadSoundFile(url);
@@ -143,32 +164,17 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
             mProgressDialog.dismiss();
         }
 
-        // ImageCache.saveToCache(mUrl, result);
+        // saving to cache. although miss or not
+        UploaderApplication.getImageDiskCache().put(mPhotoId, result);
+        UploaderApplication.getImageMemoryCache().addBitmapToMemoryCache(mPhotoId, result);
 
-        if (imgRef != null && result != null) {
-            final ImageView imageView = imgRef.get();
-            if (imageView != null) {
+        if (mImageReference != null && result != null) {
+            final ImageView imageView = mImageReference.get();
+            // get the latest task of this image view for checking
+            ImageDownloadTask imageDownloadTask = ImageUtils.getPhotoDownloadTask(imageView);
+            if ((this == imageDownloadTask) && (imageView != null)) {
                 imageView.setImageBitmap(result);
             }
         }
-
-            /*ImageDownloadTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
-            // Change bitmap only if this process is still associated with it
-            // Or if we don't use any bitmap to task association
-            // (NO_DOWNLOADED_DRAWABLE mode)
-            if (this == bitmapDownloaderTask && bitmapDownloaderTask != null) {
-                imageView.setImageBitmap(result);
-            }*/
-    }
-
-    private ImageDownloadTask getBitmapDownloaderTask(ImageView imageView) {
-       /* if (imageView != null) {
-            Drawable drawable = imageView.getDrawable();
-            if (drawable instanceof DownloadedDrawable) {
-                DownloadedDrawable downloadedDrawable = (DownloadedDrawable) drawable;
-                return downloadedDrawable.getBitmapDownloaderTask();
-            }
-        }*/
-        return null;
     }
 }

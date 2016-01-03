@@ -6,7 +6,9 @@ import com.silicons.android.uploader.uploader.model.PhotoItem;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -22,7 +24,7 @@ public class PhotoItemDAL {
 
         // this photo is new. generate new id :)
         if (photoItem.getId() == 0) {
-            photoItem.setId(realm.where(PhotoItem.class).max("id").intValue() + 1);
+            photoItem.setId(new Date().getTime());
         }
 
         realm.beginTransaction();
@@ -49,7 +51,7 @@ public class PhotoItemDAL {
         List<PhotoItem> res =  photos.subList(0, photos.size());
 
         // sort again based on user setting
-        Collections.sort(res, getUploadedComparator());
+        // Collections.sort(res, getUploadedComparator());
         return res;
     }
 

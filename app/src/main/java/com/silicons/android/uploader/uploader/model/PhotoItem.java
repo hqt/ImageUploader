@@ -13,11 +13,11 @@ import io.realm.annotations.PrimaryKey;
  */
 public class PhotoItem extends RealmObject implements Serializable {
 
-    @PrimaryKey
     @Index
-    private int id;
-
+    @PrimaryKey
     private String flickrId;
+
+    private long id;
 
     private String flickrTitle;
 
@@ -74,11 +74,11 @@ public class PhotoItem extends RealmObject implements Serializable {
         this.flickrTitle = flickrTitle;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

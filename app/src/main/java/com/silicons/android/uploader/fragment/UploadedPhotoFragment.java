@@ -6,15 +6,24 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.silicons.android.uploader.R;
+import com.silicons.android.uploader.activity.ImageListActivity;
+import com.silicons.android.uploader.adapter.FailPhotoAdapter;
+import com.silicons.android.uploader.adapter.UploadedPhotoAdapter;
+import com.silicons.android.uploader.dal.PhotoItemDAL;
+import com.silicons.android.uploader.uploader.model.PhotoItem;
+
+import java.util.List;
 
 public class UploadedPhotoFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private ImageListActivity mActivity;
 
     private RecyclerView mPhotoRecycleView;
 
@@ -41,6 +50,11 @@ public class UploadedPhotoFragment extends Fragment {
         mPhotoRecycleView = (RecyclerView) view.findViewById(R.id.uploaded_recycle_view);
         mPhotoRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        List<PhotoItem> photos = PhotoItemDAL.getAllUploadedPhotos();
+        Log.e("hqthao", "size: " + photos.size());
+        UploadedPhotoAdapter adapter = new UploadedPhotoAdapter(mActivity, photos);
+        mPhotoRecycleView.setAdapter(adapter);
+
         return view;
     }
 
@@ -49,6 +63,7 @@ public class UploadedPhotoFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            mActivity = (ImageListActivity) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

@@ -168,9 +168,9 @@ public class PrefStore {
     ////////////////////////////////////////////////////////////////////
     /////////////////////////////  SETTER //////////////////////////////
 
-    public static void setDeployedApp() {
+    public static void setFirstRun(boolean state) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putBoolean(PREF_IS_FIRST_RUN, false);
+        editor.putBoolean(PREF_IS_FIRST_RUN, state);
         editor.commit();
     }
 
