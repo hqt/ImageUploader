@@ -6,6 +6,7 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.config.AppConstant;
@@ -32,7 +33,6 @@ public class PhotoViewerActivity extends AppCompatActivity {
 
     String samplePhotoId = "24080343646";
 
-
     @Override
      protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +40,15 @@ public class PhotoViewerActivity extends AppCompatActivity {
 
         mImageView = (TouchImageView) findViewById(R.id.image_view);
 
-        ImageDownloadTask task = new ImageDownloadTask(this, mImageView, samplePhotoId,
-                AppConstant.PhotoType.PHOTO_ID_LARGE, true);
-        task.execute();
+        Bundle extras = getIntent().getExtras();
+        String photoId = extras.getString("photo_id");
+        if (photoId != null) {
+            ImageDownloadTask task = new ImageDownloadTask(this, mImageView, photoId,
+                    AppConstant.PhotoType.PHOTO_ID_LARGE, true);
+            task.execute();
+        } else {
+            Toast.makeText(this, "No photo for display.", Toast.LENGTH_SHORT).show();
+        }
 
       /*  Intent intent = getIntent();
         mPhotoId = intent.getExtras().getString("photo_id");

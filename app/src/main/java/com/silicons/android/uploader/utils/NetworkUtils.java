@@ -129,7 +129,7 @@ public class NetworkUtils {
         return result;
     }
 
-    public static byte[] downloadSoundFile(String fileURL) {
+    public static byte[] downloadImageFile(String fileURL) {
 
         HttpURLConnection httpConn = null;
         InputStream inputStream = null;
@@ -137,8 +137,6 @@ public class NetworkUtils {
 
         try {
             URL url = new URL(fileURL);
-
-            Log.e("FUCKTHAO", "----" + url.toString());
 
             httpConn = (HttpURLConnection) url.openConnection();
             int responseCode = httpConn.getResponseCode();

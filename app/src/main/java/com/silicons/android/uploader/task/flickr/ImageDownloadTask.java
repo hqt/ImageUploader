@@ -124,7 +124,7 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
         }
 
         SearchParameters searchParameters = new SearchParameters();
-        searchParameters.setText("món ăn");
+        searchParameters.setText("điện thoại di động");
         try {
             PhotoList list = flikcr.getPhotosInterface().search(searchParameters, 100, 50);
             for (int i = 0; i < list.size(); i++) {
@@ -144,7 +144,7 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
 
         Log.e(TAG, "URL: " + url);
 
-        byte[] data = NetworkUtils.downloadSoundFile(url);
+        byte[] data = NetworkUtils.downloadImageFile(url);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable = true;
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
@@ -170,6 +170,14 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
 
         if (mImageReference != null && result != null) {
             final ImageView imageView = mImageReference.get();
+
+            // in mode display progress. just has one task assign
+            if (mIsDisplayProgress) {
+                imageView.setImageBitmap(result);
+                return;
+            }
+
+            // in multi-mode. maybe there are many asynctask run parallel
             // get the latest task of this image view for checking
             ImageDownloadTask imageDownloadTask = ImageUtils.getPhotoDownloadTask(imageView);
             if ((this == imageDownloadTask) && (imageView != null)) {

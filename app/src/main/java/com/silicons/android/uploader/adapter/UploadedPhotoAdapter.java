@@ -39,9 +39,11 @@ public class UploadedPhotoAdapter extends RecyclerView.Adapter<UploadedPhotoAdap
 
     private Context mContext;
 
+    private IUploadedPhotoItemListener mListener;
 
-
-    public UploadedPhotoAdapter(Context context, List<PhotoItem> photos) {
+    public UploadedPhotoAdapter(IUploadedPhotoItemListener listener,
+                                Context context, List<PhotoItem> photos) {
+        this.mListener = listener;
         this.mPhotoItems = photos;
         this.mContext = context;
         if (mPlaceHolderBitmap == null) {
@@ -52,7 +54,7 @@ public class UploadedPhotoAdapter extends RecyclerView.Adapter<UploadedPhotoAdap
     @Override
     public UploadedPhotoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_uploaded_image, parent, false);
-        UploadedPhotoHolder holder = new UploadedPhotoHolder(v);
+        UploadedPhotoHolder holder = new UploadedPhotoHolder(v, mListener);
         return holder;
     }
 
@@ -60,10 +62,10 @@ public class UploadedPhotoAdapter extends RecyclerView.Adapter<UploadedPhotoAdap
     public void onBindViewHolder(UploadedPhotoHolder holder, int position) {
         PhotoItem photo = mPhotoItems.get(position);
 
-        holder.mSizeTextView.setText(photo.getSize() + "");
+        holder.mSizeTextView.setText(photo.getSize()/1024 + " MB");
         holder.mDateCreatedTextView.setText(DateUtils.convertLongToDate(photo.getTimeCreated()));
         holder.mPathTextView.setText(photo.getPath());
-        holder.mNameTextView.setText(photo.getFlickrTitle() + "-" + photo.getFlickrId());
+        holder.mNameTextView.setText(photo.getFlickrTitle());
 
         loadImage(holder, photo);
 
@@ -97,7 +99,7 @@ public class UploadedPhotoAdapter extends RecyclerView.Adapter<UploadedPhotoAdap
         // by creating new task for this image view
         Log.e(TAG, photo.getFlickrTitle() + " need to download");
         ImageDownloadTask task = new ImageDownloadTask(mContext, holder.mImageView,
-                photo.getFlickrId(), AppConstant.PhotoType.PHOTO_ID_SMALL, false);
+                photo.getFlickrId(), AppConstant.PhotoType.PHOTO_ID_MEDIUM, false);
         AsyncDrawable asyncDrawable = new AsyncDrawable(mContext.getResources(), mPlaceHolderBitmap, task);
         holder.mImageView.setImageDrawable(asyncDrawable);
         task.execute();
@@ -122,16 +124,28 @@ public class UploadedPhotoAdapter extends RecyclerView.Adapter<UploadedPhotoAdap
         private TextView mDateCreatedTextView;
         private TextView mPathTextView;
         private TextView mNameTextView;
+        private IUploadedPhotoItemListener mListener;
 
-        UploadedPhotoHolder(View itemView) {
+        UploadedPhotoHolder(View itemView, IUploadedPhotoItemListener listener) {
             super(itemView);
 
+            this.mListener = listener;
             mImageView = (ImageView) itemView.findViewById(R.id.photo_image_view);
             mPathTextView = (TextView) itemView.findViewById(R.id.path_text_view);
             mDateCreatedTextView = (TextView) itemView.findViewById(R.id.date_created_text_view);
             mSizeTextView = (TextView) itemView.findViewById(R.id.photo_size_text_view);
             mNameTextView = (TextView) itemView.findViewById(R.id.photo_name_text_view);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onClick(getAdapterPosition());
+                }
+            });
         }
+    }
+
+    public static interface IUploadedPhotoItemListener {
+        public void onClick(int position);
     }
 }

@@ -66,8 +66,8 @@ public class Database {
         res.add(photoItem);
 
         photoItem = new PhotoItem();
-        photoItem.setFlickrId("23692118429");
-        photoItem.setFlickrTitle("Mimosa");
+        photoItem.setFlickrId("23509557784");
+        photoItem.setFlickrTitle("Briones Regional Park");
         photoItem.setPath("/usr/mount/testing/folder");
         photoItem.setSize(1024);
         photoItem.setTimeCreated((new Date().getTime()));
@@ -84,8 +84,8 @@ public class Database {
         res.add(photoItem);
 
         photoItem = new PhotoItem();
-        photoItem.setFlickrId("23692095219");
-        photoItem.setFlickrTitle("Hoa xuyến chi");
+        photoItem.setFlickrId("21344230968");
+        photoItem.setFlickrTitle("Mai Phương Thuý");
         photoItem.setPath("/usr/mount/testing/folder");
         photoItem.setSize(1024);
         photoItem.setTimeCreated((new Date().getTime()));
@@ -93,8 +93,8 @@ public class Database {
         res.add(photoItem);
 
         photoItem = new PhotoItem();
-        photoItem.setFlickrId("23433179403");
-        photoItem.setFlickrTitle("Nữ hoàng xanh");
+        photoItem.setFlickrId("23696473729");
+        photoItem.setFlickrTitle("Áo dài");
         photoItem.setPath("/usr/mount/testing/folder");
         photoItem.setSize(1024);
         photoItem.setTimeCreated((new Date().getTime()));
