@@ -52,6 +52,14 @@ Application for uploading images to Flickr Service. This application is for Sili
  Using <a href="https://developers.google.com/picasa-web/?hl=en">Picasa Web Albums API</a>
 
 ### Login to Picasa Service
+For single-user:
+```java
+PicasawebService myService = new PicasawebService("huynhquangthao@gmail.com");
+myService.setUserCredentials("huynhquangthao@gmail.com", "password");
+```
+
+For dynamic login: Similar with Flickr API, need to call Picasa service for getting session token.
+<a href="https://developers.google.com/picasa-web/docs/1.0/developers_guide_java">Reference link</a> 
 
 ### Uploading API 
  - Link: <a href="https://developers.google.com/picasa-web/docs/2.0/developers_guide_java?csw=1#UploadPhotos">Uploading Photo API</a>
@@ -70,6 +78,19 @@ PhotoEntry returnedPhoto = myService.insert(albumPostUrl, myPhoto);
 ```
 
 ### Download Photo API
+Example code:
+ ```java
+// read all photos from an album
+URL feedUrl = "https://picasaweb.google.com/data/feed/api/user/username/albumid/albumid";
+
+AlbumFeed feed = myService.getFeed(feedUrl, AlbumFeed.class);
+
+for(PhotoEntry photo : feed.getPhotoEntries()) {
+    MediaSource mediaSource = photo.getMediaSource();
+    InputStream photoInputStream = mediaSource.getInputStream();
+    // read from the photoInputStream here to get contents of photo
+}
+ ```
 
 ## Architecture Detail
 This application also make easily for extending new uploaded services by decoupling between view(activity, fragment) and model(service, task, ...).
