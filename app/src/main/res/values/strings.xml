@@ -11,6 +11,8 @@
     <string name="fail_upload_photo_tab">Failed</string>
     <string name="setting_network">Used 3G Network for synchronized</string>
     <string name="setting_privacy_data">Clear all private data when sign out</string>
+    <string name="setting_memory_cache">Using Memory Cache for storing image</string>
+    <string name="setting_disk_cache">Using Disk Cache for storing image</string>
 
     <string-array name="uploaded_sort_type">
         <item>Name</item>

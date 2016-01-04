@@ -22,6 +22,8 @@ public class SettingActivity extends AppCompatActivity {
     private Spinner mFailedPhotoSpinner;
     private CheckBox mNetworkCheckBox;
     private CheckBox mPrivacyCheckBox;
+    private CheckBox mMemoryCacheCheckBox;
+    private CheckBox mFileCacheCheckBox;
     private Button mOkButton;
     private Button mCancelButton;
 
@@ -43,6 +45,8 @@ public class SettingActivity extends AppCompatActivity {
         mFailedPhotoSpinner = (Spinner) findViewById(R.id.failed_sort_spinner);
         mNetworkCheckBox = (CheckBox) findViewById(R.id.networkCheckBox);
         mPrivacyCheckBox = (CheckBox) findViewById(R.id.privacyCheckBox);
+        mMemoryCacheCheckBox = (CheckBox) findViewById(R.id.memoryCachedCheckbox);
+        mFileCacheCheckBox = (CheckBox) findViewById(R.id.fileCachedCheckbox);
 
         // set spinner
         mUploadedPhotoSpinner.setSelection(PrefStore.getUploadSortType());

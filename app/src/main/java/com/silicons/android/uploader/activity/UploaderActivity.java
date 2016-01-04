@@ -1,5 +1,6 @@
 package com.silicons.android.uploader.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -12,6 +13,9 @@ import android.widget.ImageButton;
 
 import com.googlecode.flickrjandroid.uploader.UploadMetaData;
 import com.silicons.android.uploader.R;
+import com.silicons.android.uploader.config.AppConstant;
+import com.silicons.android.uploader.dal.PhotoItemDAL;
+import com.silicons.android.uploader.service.UploadingService;
 import com.silicons.android.uploader.task.flickr.PhotoUploadTask;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.FileUtils;
@@ -37,9 +41,6 @@ public class UploaderActivity extends AppCompatActivity {
 
     // bitmap for assign to ImageView. keep this object for uploading later
     private Bitmap mBitmap;
-
-    // meta data for image. based on from photo gallery or from camera
-    private UploadMetaData mUploadMetaData;
 
     // PhotoItem. used for persistence to database
     private PhotoItem mPhotoItem;
@@ -67,7 +68,6 @@ public class UploaderActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 //mBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
-                byte[] data = FileUtils.convertBitmaptoByte(mBitmap);
 
                 /*String extension = FileUtils.getExtension(media);
                 if (unsupportedExtensions.contains(extension)) {
@@ -85,8 +85,18 @@ public class UploaderActivity extends AppCompatActivity {
                     throw new UploadException("File too big: " + file.getAbsolutePath(), false);
                 }*/
 
-                PhotoUploadTask task = new PhotoUploadTask(UploaderActivity.this, mFileName, data, mUri, mUploadMetaData);
-                task.execute();
+
+                // write to database first
+                mPhotoItem.setStatus(AppConstant.PhotoStatus.QUEUED);
+                PhotoItemDAL.insertOrUpdatePhoto(mPhotoItem);
+
+                // trigger intent service for uploading. uploading photos will put into queue
+                Intent intent = new Intent(getApplicationContext(), UploadingService.class);
+                intent.putExtra("photo", mPhotoItem);
+                startService(intent);
+
+                // go back previous activity
+                finish();
 
             }
         });
@@ -98,17 +108,13 @@ public class UploaderActivity extends AppCompatActivity {
 
             mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
             String filePath = FileUtils.getRealPathFromURI(uri);
-            mFileName = FileUtils.getImageNameFromUri(uri);
+            mFileName = new File(filePath).getName();
 
             // create information for photo item
             mPhotoItem.setPath(filePath);
             mPhotoItem.setSize(mBitmap.getByteCount());
             mPhotoItem.setFlickrTitle(mFileName);
-
-            // create information for meta data
-            mUploadMetaData = new UploadMetaData();
-            mUploadMetaData.setDescription("Image from photo gallery");
-            mUploadMetaData.setTitle("Image from photo gallery");
+            Log.e("hqthao",toString(mPhotoItem));
 
             mImageView.setImageBitmap(mBitmap);
         } catch (IOException e) {
@@ -120,6 +126,7 @@ public class UploaderActivity extends AppCompatActivity {
         mPhotoItem = new PhotoItem();
 
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
         mBitmap = BitmapFactory.decodeFile(path, bmOptions);
         mFileName = new File(path).getName();
         Log.e("hqthao", "file name: " + mFileName);
@@ -128,58 +135,18 @@ public class UploaderActivity extends AppCompatActivity {
         mPhotoItem.setPath(path);
         mPhotoItem.setSize(mBitmap.getByteCount());
         mPhotoItem.setFlickrTitle(mFileName);
-
-        // create information for meta data
-        mUploadMetaData = new UploadMetaData();
-        mUploadMetaData.setDescription("Screenshot from camera");
-        mUploadMetaData.setTitle("Screenshot from camera");
+        Log.e("hqthao",toString(mPhotoItem));
 
         mImageView.setImageBitmap(mBitmap);
     }
 
-    byte[] data;
-
-    private void setPic() {
-
-        /*mImageView.setImageBitmap(mBitmap);
-        Bitmap result = Bitmap.createScaledBitmap(mBitmap,
-                mImageView.getWidth(), mImageView.getHeight(), false);
-        mImageView.setImageBitmap(result);
-        mBitmap = result;*/
-
-        data = FileUtils.convertBitmaptoByte(mBitmap);
-
-		 // There isn't enough memory to open up more than a couple camera photos
-		 // So pre-scale the target bitmap into which the file is decoded
-
-		 // Get the size of the ImageView
-        int targetW = mImageView.getWidth();
-        int targetH = mImageView.getHeight();
-
-		 // Get the size of the image
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeByteArray(data, 0, data.length, bmOptions);
-        // BitmapFactory.decodeFile(path, bmOptions);
-
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-		//  Figure out which way needs to be reduced less
-        int scaleFactor = 1;
-        if ((targetW > 0) || (targetH > 0)) {
-            scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-        }
-
-		// Set bitmap options to scale the image decode target
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        // Decode the JPEG file into a Bitmap
-        mBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, bmOptions);
-
-		// Associate the Bitmap to the ImageView
-        mImageView.setImageBitmap(mBitmap);
+    public String toString(PhotoItem photoItem) {
+        return "PhotoItem{" +
+                "flickrId='" + photoItem.getFlickrId() + '\'' +
+                ", id=" + photoItem.getId() +
+                ", flickrTitle='" + photoItem.getFlickrTitle() + '\'' +
+                ", path='" + photoItem.getPath() + '\'' +
+                ", size='" + photoItem.getSize() + "\'" +
+                '}';
     }
 }

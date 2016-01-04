@@ -50,24 +50,5 @@ public class PhotoViewerActivity extends AppCompatActivity {
             Toast.makeText(this, "No photo for display.", Toast.LENGTH_SHORT).show();
         }
 
-      /*  Intent intent = getIntent();
-        mPhotoId = intent.getExtras().getString("photo_id");
-        mPath = intent.getExtras().getString("photo_path");*/
-
-
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        /*File file = new File(mPath);
-        if (file.exists()) {
-            // render image from local for saving bandwidth
-        } else {
-           *//* ImageDownloadTask task = new ImageDownloadTask();
-            task.execute();*//*
-        }*/
-    }
-
 }

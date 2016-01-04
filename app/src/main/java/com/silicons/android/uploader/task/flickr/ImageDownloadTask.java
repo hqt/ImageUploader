@@ -123,7 +123,7 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
             return null;
         }
 
-        SearchParameters searchParameters = new SearchParameters();
+        /*SearchParameters searchParameters = new SearchParameters();
         searchParameters.setText("điện thoại di động");
         try {
             PhotoList list = flikcr.getPhotosInterface().search(searchParameters, 100, 50);
@@ -140,7 +140,7 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         Log.e(TAG, "URL: " + url);
 

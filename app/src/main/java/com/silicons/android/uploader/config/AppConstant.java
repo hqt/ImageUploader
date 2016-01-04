@@ -42,6 +42,7 @@ public class AppConstant {
         public static final int QUEUED = 0;
         public static final int UPLOADED = 1;
         public static final int FAILED = 2;
+        public static final int UPLOADING = 3;
     }
 
     public static class PhotoType {

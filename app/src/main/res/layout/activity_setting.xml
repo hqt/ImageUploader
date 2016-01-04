@@ -143,6 +143,48 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:text="Developer Option"
+                android:textColor="@color/primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/setting_drop_shadow" />
+
+            <CheckBox
+                android:id="@+id/memoryCachedCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginBottom="15dip"
+                android:layout_marginTop="5dip"
+                android:checked="true"
+                android:text="@string/setting_memory_cache"
+                android:textColor="@color/primary"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+            <CheckBox
+                android:id="@+id/fileCachedCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginBottom="15dip"
+                android:layout_marginTop="5dip"
+                android:checked="true"
+                android:text="@string/setting_disk_cache"
+                android:textColor="@color/primary"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
 
             <LinearLayout
                 android:layout_width="wrap_content"

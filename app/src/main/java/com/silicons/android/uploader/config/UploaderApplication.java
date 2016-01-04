@@ -16,7 +16,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-/**
+/**Entry point of android application
  * Created by Huynh Quang Thao on 12/30/15.
  */
 public class UploaderApplication extends Application {
@@ -41,8 +41,8 @@ public class UploaderApplication extends Application {
         Realm.setDefaultConfiguration(config);
 
         // start uploading service
-        Intent intent = new Intent(mContext, UploadingService.class);
-        startService(intent);
+        //Intent intent = new Intent(mContext, UploadingService.class);
+        //startService(intent);
 
         mImageDiskCache = new DiskLruImageCache(mContext, AppConstant.FileCache.FOLDER_NAME, AppConstant.FileCache.SYSTEM_SIZE,
                 Bitmap.CompressFormat.JPEG, 100);

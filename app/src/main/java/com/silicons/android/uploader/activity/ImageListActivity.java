@@ -168,9 +168,12 @@ public class ImageListActivity extends AppCompatActivity
         @Override
         public void onClick(View v) {
             Intent getPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+
             getPhotoIntent.setType("image/*");
             if (getPhotoIntent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(getPhotoIntent, IntentCode.PICK_PHOTO_INTENT);
+                startActivityForResult(Intent.createChooser(getPhotoIntent,
+                                "Should choose Gallery App for working properly"),
+                        IntentCode.PICK_PHOTO_INTENT);
             } else {
                 DialogUtils.displayDialog(ImageListActivity.this,
                         "No photo viewer in your system");

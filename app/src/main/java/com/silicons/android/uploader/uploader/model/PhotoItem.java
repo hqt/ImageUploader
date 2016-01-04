@@ -15,9 +15,9 @@ public class PhotoItem extends RealmObject implements Serializable {
 
     @Index
     @PrimaryKey
-    private String flickrId;
-
     private long id;
+
+    private String flickrId;
 
     private String flickrTitle;
 
@@ -38,8 +38,6 @@ public class PhotoItem extends RealmObject implements Serializable {
     public void setTimeCreated(long timeCreated) {
         this.timeCreated = timeCreated;
     }
-
-
 
     public PhotoItem() {
 
@@ -105,4 +103,6 @@ public class PhotoItem extends RealmObject implements Serializable {
     public void setStatus(int status) {
         this.status = status;
     }
+
+
 }

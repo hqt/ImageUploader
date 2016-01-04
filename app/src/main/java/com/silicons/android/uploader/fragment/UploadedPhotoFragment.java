@@ -1,6 +1,8 @@
 package com.silicons.android.uploader.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,14 +16,22 @@ import android.view.ViewGroup;
 
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.activity.ImageListActivity;
+import com.silicons.android.uploader.activity.LoginActivity;
 import com.silicons.android.uploader.activity.PhotoViewerActivity;
 import com.silicons.android.uploader.activity.UploaderActivity;
 import com.silicons.android.uploader.adapter.FailPhotoAdapter;
 import com.silicons.android.uploader.adapter.UploadedPhotoAdapter;
+import com.silicons.android.uploader.config.AppConstant;
+import com.silicons.android.uploader.config.PrefStore;
+import com.silicons.android.uploader.config.UploaderApplication;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
+import com.silicons.android.uploader.model.UploadedPhotoNotify;
+import com.silicons.android.uploader.uploader.authen.FlickrOath;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
 
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 public class UploadedPhotoFragment extends Fragment implements UploadedPhotoAdapter.IUploadedPhotoItemListener {
 
@@ -31,6 +41,9 @@ public class UploadedPhotoFragment extends Fragment implements UploadedPhotoAdap
     private RecyclerView mPhotoRecycleView;
 
     private List<PhotoItem> mPhotos;
+
+
+    private EventBus mBus = EventBus.getDefault();
 
     public UploadedPhotoFragment() {
         // Required empty public constructor
@@ -72,12 +85,37 @@ public class UploadedPhotoFragment extends Fragment implements UploadedPhotoAdap
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        mBus.register(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        mBus.unregister(this);
+    }
+
+    public void onEventMainThread(UploadedPhotoNotify photo) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        builder.setMessage("Photo " + photo.getPhoto().getFlickrTitle() + " has uploaded successfully. Refresh view ?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        mPhotos = PhotoItemDAL.getAllUploadedPhotos();
+                        UploadedPhotoAdapter adapter = new UploadedPhotoAdapter(
+                                UploadedPhotoFragment.this, mActivity, mPhotos);
+                        mPhotoRecycleView.setAdapter(adapter);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
@@ -87,7 +125,6 @@ public class UploadedPhotoFragment extends Fragment implements UploadedPhotoAdap
         intent.putExtra("photo_id", photo.getFlickrId());
         startActivity(intent);
     }
-
 
     public interface OnFragmentInteractionListener {
     }
