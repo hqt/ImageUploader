@@ -66,6 +66,16 @@ public class PrefStore {
      */
     public static final String PREF_PROVIDER_MODE= "pref_provider_mode";
 
+    /**
+     * preference key for using Disk Cache
+     */
+    public static final String PREF_DISK_CACHE= "pref_disk_cache";
+
+    /**
+     * preference key for using memory Cache
+     */
+    public static final String PREF_MEMORY_CACHE = "pref_memory_cache";
+
 
     ///////////////////////////////////////////////////////////////
     /////////////////   DEFAULT VALUE   ///////////////////////////
@@ -88,6 +98,16 @@ public class PrefStore {
      * Default value for {@link PrefStore#PREF_IS_MOBILE_NETWORK}
      */
     private static final boolean DEFAULT_MOBILE_NETWORK = true;
+
+    /**
+     * Default value for {@link PrefStore#PREF_MEMORY_CACHE}
+     */
+    private static final boolean DEFAULT_MEMORY_CACHE = true;
+
+    /**
+     * Default value for {@link PrefStore#PREF_DISK_CACHE}
+     */
+    private static final boolean DEFAULT_DISK_CACHE = true;
 
     /**
      * Default value for {@link PrefStore#PREF_PRIVACY_DATA}
@@ -133,6 +153,15 @@ public class PrefStore {
         return getSharedPreferences().getBoolean(PREF_IS_MOBILE_NETWORK, DEFAULT_MOBILE_NETWORK);
     }
 
+    public static boolean getAllowDiskCache() {
+        return getSharedPreferences().getBoolean(PREF_DISK_CACHE, DEFAULT_DISK_CACHE);
+    }
+
+    public static boolean getAllowMemoryCache() {
+        return getSharedPreferences().getBoolean(PREF_MEMORY_CACHE, DEFAULT_MEMORY_CACHE);
+    }
+
+
     public static boolean getIsPrivacy() {
         return getSharedPreferences().getBoolean(PREF_PRIVACY_DATA, DEFAULT_PRIVACY_DATA);
     }
@@ -177,6 +206,18 @@ public class PrefStore {
     public static void setMobileNetwork(boolean state) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
         editor.putBoolean(PREF_IS_MOBILE_NETWORK, state);
+        editor.commit();
+    }
+
+    public static void setDiskCacheMode(boolean state) {
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putBoolean(PREF_DISK_CACHE, state);
+        editor.commit();
+    }
+
+    public static void setMemoryCacheMode(boolean state) {
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putBoolean(PREF_MEMORY_CACHE, state);
         editor.commit();
     }
 

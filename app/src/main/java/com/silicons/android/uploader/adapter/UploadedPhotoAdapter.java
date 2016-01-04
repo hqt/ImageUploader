@@ -15,6 +15,7 @@ import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.cache.DiskLruImageCache;
 import com.silicons.android.uploader.cache.MemoryImageCache;
 import com.silicons.android.uploader.config.AppConstant;
+import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.config.UploaderApplication;
 import com.silicons.android.uploader.task.flickr.ImageDownloadTask;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
@@ -79,7 +80,7 @@ public class UploadedPhotoAdapter extends RecyclerView.Adapter<UploadedPhotoAdap
 
         // check if on memory cache
         MemoryImageCache memoryImageCache = UploaderApplication.getImageMemoryCache();
-        if (memoryImageCache.containsKey(photo.getFlickrId())) {
+        if (PrefStore.getAllowMemoryCache() && memoryImageCache.containsKey(photo.getFlickrId())) {
             Log.e(TAG, photo.getFlickrTitle() + " memory cached hit");
             Bitmap image = memoryImageCache.getBitmapFromMemCache(photo.getFlickrId());
             holder.mImageView.setImageBitmap(image);
@@ -88,7 +89,7 @@ public class UploadedPhotoAdapter extends RecyclerView.Adapter<UploadedPhotoAdap
 
         // check if on file cache
         DiskLruImageCache imageDiskCache = UploaderApplication.getImageDiskCache();
-        if (imageDiskCache.containsKey(photo.getFlickrId())) {
+        if (PrefStore.getAllowDiskCache() && imageDiskCache.containsKey(photo.getFlickrId())) {
             Log.e(TAG, photo.getFlickrTitle() + " file cached hit");
             Bitmap image = imageDiskCache.getBitmap(photo.getFlickrId());
             holder.mImageView.setImageBitmap(image);

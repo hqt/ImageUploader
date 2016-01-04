@@ -169,8 +169,13 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
         }
 
         // saving to cache. although miss or not
-        UploaderApplication.getImageDiskCache().put(mPhotoId, result);
-        UploaderApplication.getImageMemoryCache().addBitmapToMemoryCache(mPhotoId, result);
+        if (PrefStore.getAllowDiskCache()) {
+            UploaderApplication.getImageDiskCache().put(mPhotoId, result);
+        }
+
+        if (PrefStore.getAllowMemoryCache()) {
+            UploaderApplication.getImageMemoryCache().addBitmapToMemoryCache(mPhotoId, result);
+        }
 
         if (mImageReference != null && result != null) {
             final ImageView imageView = mImageReference.get();

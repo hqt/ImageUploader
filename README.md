@@ -40,9 +40,20 @@ Application for uploading images to Flickr Service. This application is for Sili
 - **Flikrj-android:** Flickr Restful API Wrapper for Android.
 - **EventBus:** Using for transfer data between activity and activity, activity and service ...
 - **Realm:** Mobile ORM Database, supports many platforms such as Android, iOS .. and is proved faster than normal SQLite Database
-- **Material libraries:** libraries for implementing Google material design guideline.
+- **Material libraries:** libraries for implementing Google material design guideline. (RecycleView, FloatingButtonAction, ...)
+
+# Extending Google Picassa Uploading Service
+ **Note:** Picassa uses Oath2 and Flickr uses Oath for authentication. Nevertheless, This difference doesn't have big affect because we use built-in api libraries for those services.
+ Here is some list API for implement Picassa upload function:
+- Processing between android and Picassa serice: Using <a href="https://developers.google.com/picasa-web/?hl=en">Picasa Web Albums API</a>
+- Login to Picasa Service:
+- Uploading API:
+- Download Photo API:
+
+
+My application provided for extending to other Photo Uploading Service by infrastructure decoupling between Activities (View) and other actions.
 
 # Testing
-
-# Extend
-My application provided for extending to other Photo Uploading Service by infrastructure decoupling between Activities (View) and other actions.
+Testing project is stored under `src/test`. I create two sample test screen : `SettingActivity` and `ImageListActivity`. Using two main libraries:
+ - **JUnit4** for unit test
+ - **espresso** for instrument testing

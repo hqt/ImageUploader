@@ -63,6 +63,8 @@ public class SettingActivity extends AppCompatActivity {
         // set checkbox
         mNetworkCheckBox.setChecked(PrefStore.getIsMobileNetwork());
         mPrivacyCheckBox.setChecked(PrefStore.getIsPrivacy());
+        mFileCacheCheckBox.setChecked(PrefStore.getAllowDiskCache());
+        mMemoryCacheCheckBox.setChecked(PrefStore.getAllowMemoryCache());
 
         mOkButton = (Button) findViewById(R.id.btn_ok);
         mCancelButton = (Button) findViewById(R.id.btn_cancel);
@@ -74,6 +76,8 @@ public class SettingActivity extends AppCompatActivity {
                 PrefStore.setFailSortType(mFailedPhotoSpinner.getSelectedItemPosition());
                 PrefStore.setMobileNetwork(mNetworkCheckBox.isChecked());
                 PrefStore.setPrivacyData(mPrivacyCheckBox.isChecked());
+                PrefStore.setDiskCacheMode(mFileCacheCheckBox.isChecked());
+                PrefStore.setMemoryCacheMode(mMemoryCacheCheckBox.isChecked());
 
                 finish();
             }
