@@ -91,6 +91,9 @@ public class ImageListActivity extends AppCompatActivity
             PrefStore.setFirstRun(false);
         }
 
+        // user must confirm everything
+        setFinishOnTouchOutside(false);
+
         // Set up tab view
         PhotoPagerAdapter adapter = new PhotoPagerAdapter(getSupportFragmentManager(), this);
         mViewPager.setAdapter(adapter);

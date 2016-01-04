@@ -92,6 +92,10 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
         Flickr flikcr = FlickrHelper.getInstance().getFlickr();
         PhotosInterface photoService = flikcr.getPhotosInterface();
 
+        if (!NetworkUtils.isNetworkAvailable()) {
+            return null;
+        }
+
         Photo photo = null;
         try {
             photo = photoService.getPhoto(mPhotoId, PrefStore.getFlickTokenSecret());

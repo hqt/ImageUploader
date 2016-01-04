@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.config.AppConstant;
@@ -16,6 +17,7 @@ import com.silicons.android.uploader.dal.PhotoItemDAL;
 import com.silicons.android.uploader.task.flickr.OAuthTask;
 import com.silicons.android.uploader.task.flickr.UserAuthTask;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.utils.NetworkUtils;
 
 import java.util.List;
 
@@ -59,7 +61,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // first step. authentication for getting token
-                new OAuthTask(LoginActivity.this).execute();
+                if (NetworkUtils.isNetworkAvailable()) {
+                    new OAuthTask(LoginActivity.this).execute();
+                } else {
+                    Toast.makeText(LoginActivity.this, R.string.network_not_available_message,
+                            Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
@@ -86,9 +94,13 @@ public class LoginActivity extends AppCompatActivity {
 
                 String oauthSecret = PrefStore.getFlickTokenSecret();
                 if (oauthSecret != null) {
-                    // run task for getting user information. and then move list activity
-                    UserAuthTask task = new UserAuthTask(this, oauthToken, oauthSecret, oauthVerifier);
-                    task.execute();
+                    if (NetworkUtils.isNetworkAvailable()) {
+                        UserAuthTask task = new UserAuthTask(this, oauthToken, oauthSecret, oauthVerifier);
+                        task.execute();
+                    } else {
+                        Toast.makeText(LoginActivity.this, R.string.network_not_available_message,
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         }

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.googlecode.flickrjandroid.uploader.UploadMetaData;
 import com.silicons.android.uploader.R;
@@ -19,10 +20,13 @@ import com.silicons.android.uploader.service.UploadingService;
 import com.silicons.android.uploader.task.flickr.PhotoUploadTask;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.FileUtils;
+import com.silicons.android.uploader.utils.NetworkUtils;
 import com.silicons.android.uploader.widgets.TouchImageView;
 
 import java.io.File;
 import java.io.IOException;
+
+import static com.silicons.android.uploader.config.AppConstant.FLICKR_SUPPORTED_EXTENSIONS;
 
 /**
  * preview and upload image screen
@@ -66,25 +70,28 @@ public class UploaderActivity extends AppCompatActivity {
         mUploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                //mBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
 
-                /*String extension = FileUtils.getExtension(media);
-                if (unsupportedExtensions.contains(extension)) {
-                    throw new UploadException("Unsupported extension: " + extension, false);
-                }
-                String uri = media.getPath();
+                // validate image before upload
+                String errorMessage = null;
+                String extension = FileUtils.getExtension(mPhotoItem);
+                String uri = mPhotoItem.getPath();
                 File file = new File(uri);
-                if (!file.exists()) {
-                    throw new UploadException("File no longer exists: " + file.getAbsolutePath(), false);
+                if (!FLICKR_SUPPORTED_EXTENSIONS.contains(extension)) {
+                    errorMessage = "This file extension is not supported";
+                } else if (!file.exists()) {
+                    errorMessage = "File no longer exist";
+                } else if (file.length() <= 10) {
+                   errorMessage = "File is empty";
+                } else if (file.length() > 1024 * 1024 * 1024L) {
+                    errorMessage = "File too big";
+                } else if (!NetworkUtils.isNetworkAvailable()) {
+                    errorMessage = "Network not available now. Please try again later";
                 }
-                if (file.length() <= 10) {
-                    throw new UploadException("File is empty: " + file.getAbsolutePath(), false);
-                }
-                if (file.length() > 1024 * 1024 * 1024L) {
-                    throw new UploadException("File too big: " + file.getAbsolutePath(), false);
-                }*/
 
+                if (errorMessage != null) {
+                    Toast.makeText(UploaderActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 // write to database first
                 mPhotoItem.setStatus(AppConstant.PhotoStatus.QUEUED);

@@ -18,11 +18,13 @@ import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.AppConstant.PhotoStatus;
 import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
+import com.silicons.android.uploader.model.FailedPhotoNotify;
 import com.silicons.android.uploader.model.QueuedPhotoNotify;
 import com.silicons.android.uploader.model.UploadedPhotoNotify;
 import com.silicons.android.uploader.uploader.manager.FlickrHelper;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.FileUtils;
+import com.silicons.android.uploader.utils.NetworkUtils;
 import com.silicons.android.uploader.utils.NotificationUtils;
 
 import java.io.File;
@@ -34,7 +36,7 @@ import de.greenrobot.event.EventBus;
 
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 
-/**
+/** Uploading Image Service. Using for upload to Flickr.
  * Created by Huynh Quang Thao on 1/1/16.
  */
 public class UploadingService extends IntentService {
@@ -118,6 +120,7 @@ public class UploadingService extends IntentService {
             displayToast("Download " + mPhoto.getFlickrTitle() + " fail.Error:" + errorCode);
             mPhoto.setStatus(PhotoStatus.FAILED);
             PhotoItemDAL.insertOrUpdatePhoto(mPhoto);
+            mBus.post(new FailedPhotoNotify(mPhoto));
         }
     }
 

@@ -76,7 +76,6 @@ public class NetworkUtils {
     }
 
     public static boolean isNetworkAvailable() {
-        Context ctx = UploaderApplication.getAppContext();
         if (PrefStore.getIsMobileNetwork()) {
             return isNetworkConnected();
         } else {

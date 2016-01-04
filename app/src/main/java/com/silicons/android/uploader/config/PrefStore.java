@@ -87,7 +87,7 @@ public class PrefStore {
     /**
      * Default value for {@link PrefStore#PREF_IS_MOBILE_NETWORK}
      */
-    private static final boolean DEFAULT_MOBILE_NETWORK = false;
+    private static final boolean DEFAULT_MOBILE_NETWORK = true;
 
     /**
      * Default value for {@link PrefStore#PREF_PRIVACY_DATA}
