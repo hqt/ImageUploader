@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,12 +16,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.googlecode.flickrjandroid.uploader.UploadMetaData;
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
 import com.silicons.android.uploader.service.UploadingService;
-import com.silicons.android.uploader.task.flickr.PhotoUploadTask;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.FileUtils;
 import com.silicons.android.uploader.utils.ImageUtils;
@@ -32,7 +29,9 @@ import com.silicons.android.uploader.widgets.TouchImageView;
 import java.io.File;
 import java.io.IOException;
 
+import static com.silicons.android.uploader.config.AppConstant.*;
 import static com.silicons.android.uploader.config.AppConstant.FLICKR_SUPPORTED_EXTENSIONS;
+import static com.silicons.android.uploader.config.AppConstant.PhotoType.*;
 
 /**
  * preview and upload image screen
@@ -63,7 +62,6 @@ public class UploaderActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        //actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
         toolbar.setTitle("Preview Image");
@@ -81,18 +79,17 @@ public class UploaderActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         String uriStr = extras.getString("uri_photo_gallery");
-        String cameraPhotoPath = extras.getString("photo_camera_path");
         if (uriStr != null) {
             mUri = Uri.parse(uriStr);
             parseImageFromUri(mUri);
-        } else if (cameraPhotoPath != null) {
-            parseImageFromPath(cameraPhotoPath);
+        } else {
+            String filePath = extras.getString("file_path");
+            parseImageFromCameraUri(filePath);
         }
 
         mUploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // validate image before upload
                 String errorMessage = null;
                 String extension = FileUtils.getExtension(mPhotoItem);
@@ -103,7 +100,7 @@ public class UploaderActivity extends AppCompatActivity {
                 } else if (!file.exists()) {
                     errorMessage = "File no longer exist";
                 } else if (file.length() <= 10) {
-                   errorMessage = "File is empty";
+                    errorMessage = "File is empty";
                 } else if (file.length() > 1024 * 1024 * 1024L) {
                     errorMessage = "File too big";
                 } else if (!NetworkUtils.isNetworkAvailable()) {
@@ -116,7 +113,7 @@ public class UploaderActivity extends AppCompatActivity {
                 }
 
                 // write to database first
-                mPhotoItem.setStatus(AppConstant.PhotoStatus.QUEUED);
+                mPhotoItem.setStatus(PhotoStatus.QUEUED);
                 PhotoItemDAL.insertOrUpdatePhoto(mPhotoItem);
 
                 // trigger intent service for uploading. uploading photos will put into queue
@@ -147,27 +144,38 @@ public class UploaderActivity extends AppCompatActivity {
         mPhotoItem.setPath(filePath);
         mPhotoItem.setSize(mBitmap.getByteCount());
         mPhotoItem.setFlickrTitle(mFileName);
-        Log.e("hqthao",toString(mPhotoItem));
+        mPhotoItem.setType(PhotoType.PICTURE);
+        Log.e("hqthao", toString(mPhotoItem));
 
         mImageView.setImageBitmap(mBitmap);
     }
 
-    private void parseImageFromPath(String path) {
+    private void parseImageFromCameraUri(String filePath) {
         mPhotoItem = new PhotoItem();
 
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        mBitmap = BitmapFactory.decodeFile(path, bmOptions);
-        mFileName = new File(path).getName();
-        Log.e("hqthao", "file name: " + mFileName);
+        try {
+            File file = new File(filePath);
 
-        // create information for photo item
-        mPhotoItem.setPath(path);
-        mPhotoItem.setSize(mBitmap.getByteCount());
-        mPhotoItem.setFlickrTitle(mFileName);
-        Log.e("hqthao",toString(mPhotoItem));
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int height = size.y;
+            mBitmap = ImageUtils.decodeSampledBitmapFromPath(filePath, width, height);
+            mFileName = new File(filePath).getName();
 
-        mImageView.setImageBitmap(mBitmap);
+            // create information for photo item
+            mPhotoItem.setPath(filePath);
+            mPhotoItem.setSize(mBitmap.getByteCount());
+            mPhotoItem.setFlickrTitle(mFileName);
+            mPhotoItem.setType(PhotoType.CAMERA);
+            Log.e("hqthao", toString(mPhotoItem));
+
+            mImageView.setImageBitmap(mBitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String toString(PhotoItem photoItem) {

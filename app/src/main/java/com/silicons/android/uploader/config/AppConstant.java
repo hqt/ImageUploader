@@ -53,6 +53,8 @@ public class AppConstant {
         public static final int PHOTO_ID_LARGE = 4;
         public static final int PHOTO_SET_ID = 5;
         public static final int PHOTO_POOL_ID = 6;
+        public static final int CAMERA = 7;
+        public static final int PICTURE = 8;
     }
 
     public static final class FileCache {

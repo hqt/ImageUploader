@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -36,8 +38,12 @@ import com.silicons.android.uploader.uploader.authen.FlickrOath;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.DialogUtils;
 import com.silicons.android.uploader.utils.FileUtils;
+import com.silicons.android.uploader.utils.ImageUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.silicons.android.uploader.config.AppConstant.*;
@@ -150,7 +156,6 @@ public class ImageListActivity extends AppCompatActivity
                         Toast.LENGTH_SHORT).show();
                 return;
             }
-
             // passing URI. instead of decode to bitmap for saving memory :)
             mImageUri = data.getData();
             Log.e(TAG, "Photo: " + mImageUri.toString());
@@ -162,8 +167,9 @@ public class ImageListActivity extends AppCompatActivity
         // processing for getting photo from camera
         else if (requestCode == IntentCode.TAKE_CAMERA_INTENT) {
             Log.e(TAG, "Camera: " + mPhotoPath);
+
             Intent intent = new Intent(this, UploaderActivity.class);
-            intent.putExtra("photo_camera_path", mPhotoPath);
+            intent.putExtra("file_path", mPhotoPath);
             startActivity(intent);
         }
     }
@@ -209,11 +215,11 @@ public class ImageListActivity extends AppCompatActivity
 
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                 File photo = null;
+
                 try {
-                    // place where to store camera taken picture
-                    photo = FileUtils.createTemporaryFile("picture", ".jpg");
+                    String fileName = "capture-" + new Date().toString() + ".jpeg";
+                    photo = FileUtils.createExternalStoragePublicPicture(fileName, new byte[]{});
                     mPhotoPath = photo.getPath();
-                    //photo.delete();
                 } catch (Exception e) {
                     Log.v(TAG, "Can't create file to take picture!");
                     Toast.makeText(getApplicationContext(), "Please check SD card. Image shot is impossible",
@@ -221,6 +227,7 @@ public class ImageListActivity extends AppCompatActivity
                 }
 
                 if (photo != null) {
+                    mImageUri = Uri.fromFile(photo);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
                     startActivityForResult(takePictureIntent, IntentCode.TAKE_CAMERA_INTENT);
                 }

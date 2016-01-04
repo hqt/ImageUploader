@@ -25,6 +25,8 @@ public class PhotoItem extends RealmObject implements Serializable {
 
     private long timeCreated;
 
+    private int type;
+
     private int retries;
 
     private int status;
@@ -70,6 +72,15 @@ public class PhotoItem extends RealmObject implements Serializable {
 
     public void setFlickrTitle(String flickrTitle) {
         this.flickrTitle = flickrTitle;
+    }
+
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public long getId() {
