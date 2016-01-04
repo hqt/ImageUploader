@@ -52,7 +52,7 @@ public class QueuePhotoAdapter extends RecyclerView.Adapter<QueuePhotoAdapter.Qu
 
     @Override
     public QueuedPhotoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_uploaded_image, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_queued_image, parent, false);
         QueuedPhotoHolder holder = new QueuedPhotoHolder(v, mListener);
         return holder;
     }

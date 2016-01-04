@@ -85,7 +85,7 @@ public class QueuePhotoFragment extends Fragment implements QueuePhotoAdapter.IQ
 
     @Override
     public void onClick(int position) {
-        Toast.makeText(mActivity, "Retry function is not implement.", Toast.LENGTH_SHORT).show();
+
     }
 
     public interface OnFragmentInteractionListener {

@@ -6,7 +6,7 @@
     tools:context="com.silicons.android.uploader.fragment.QueuePhotoFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/uploaded_recycle_view"
+        android:id="@+id/failed_recycle_view"
         android:layout_width="match_parent"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="10dp"
