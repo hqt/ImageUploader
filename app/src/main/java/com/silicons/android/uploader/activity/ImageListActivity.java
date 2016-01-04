@@ -291,7 +291,19 @@ public class ImageListActivity extends AppCompatActivity
     private TabLayout.OnTabSelectedListener mTabSelectedListener = new TabLayout.OnTabSelectedListener() {
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
+            int position = tab.getPosition();
             mViewPager.setCurrentItem(tab.getPosition());
+            switch (position) {
+                case 0:
+                    setTitle("Uploaded photos");
+                    break;
+                case 1:
+                    setTitle("Queued photos");
+                    break;
+                case 2:
+                    setTitle("Failed photos");
+                    break;
+            }
         }
 
         @Override

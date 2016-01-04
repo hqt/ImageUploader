@@ -61,7 +61,7 @@ public class UploaderActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(true);
         toolbar.setTitle("Preview Image");
 
         toolbar.setNavigationIcon(R.drawable.ic_back);

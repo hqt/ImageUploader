@@ -65,12 +65,16 @@ public class QueuePhotoFragment extends Fragment implements QueuePhotoAdapter.IQ
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
             mActivity = (ImageListActivity) context;
-            mActivity.setTitle("Queue Photos");
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

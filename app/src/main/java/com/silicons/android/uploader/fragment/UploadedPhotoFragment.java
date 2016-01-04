@@ -64,6 +64,7 @@ public class UploadedPhotoFragment extends Fragment implements UploadedPhotoAdap
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_uploaded_photo, container, false);
+        mActivity.setTitle("Uploaded photos");
 
         mPhotoRecycleView = (RecyclerView) view.findViewById(R.id.uploaded_recycle_view);
         mPhotoRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -81,7 +82,6 @@ public class UploadedPhotoFragment extends Fragment implements UploadedPhotoAdap
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
             mActivity = (ImageListActivity) context;
-            mActivity.setTitle("Uploaded Photos");
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -94,6 +94,11 @@ public class UploadedPhotoFragment extends Fragment implements UploadedPhotoAdap
         super.onDetach();
         mListener = null;
         mBus.unregister(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     public void onEventMainThread(UploadedPhotoNotify photo) {

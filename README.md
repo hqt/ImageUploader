@@ -11,9 +11,9 @@ Application for uploading images to Flickr Service. This application is for Sili
 
 <table>
   <tr>
-    <td><b>Main screen</b></td>
-    <td><b>Bus Search Screen</b></td>
-    <td><b>Motor Search Screen</b></td>
+    <td><b>Login Screen/b></td>
+    <td><b>Uploaded Photo Screen</b></td>
+    <td><b>Queue Photo Screen</b></td>
   </tr>
   <tr>
     <td><img src="AppImages/1.png" width="240"/>&nbsp;&nbsp;&nbsp;</td>
@@ -24,25 +24,14 @@ Application for uploading images to Flickr Service. This application is for Sili
 
 <table>
   <tr>
-    <td><b>Bus Detail Screen</b></td>
-    <td><b>Optional Parameter Screen</b></td>
-    <td><b>Detail Map Screen</b></td>
+    <td><b>Preview Photo Screen</b></td>
+    <td><b>Navigation Drawer Screen</b></td>
+    <td><b>Setting Screen</b></td>
   </tr>
   <tr>
     <td><img src="AppImages/4.png" width="240"/>&nbsp;&nbsp;&nbsp;</td>
     <td><img src="AppImages/5.png" width="240"/>&nbsp;&nbsp;&nbsp;</td>
     <td><img src="AppImages/6.png" width="240"/>&nbsp;&nbsp;&nbsp;</td>
-  </tr>
-</table>
-
-<table>
-  <tr>
-    <td><b>Wear Detail Map</b></td>
-    <td><b>Wear Notification</b></td>
-  </tr>
-  <tr>
-    <td><img src="AppImages/w1.png" width="240"/>&nbsp;&nbsp;&nbsp;</td>
-    <td><img src="AppImages/w2.png" width="240"/>&nbsp;&nbsp;&nbsp;</td>
   </tr>
 </table>
 

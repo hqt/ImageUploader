@@ -79,6 +79,12 @@ public class UploadingService extends IntentService {
                 "Download " + mPhoto.getFlickrTitle(), "In progress");
         displayToast("Downloading " + mPhoto.getFlickrTitle());
 
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         uploadImageTask();
     }
 

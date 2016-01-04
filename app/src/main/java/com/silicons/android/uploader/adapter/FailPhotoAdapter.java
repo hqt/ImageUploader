@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.DateUtils;
+import com.silicons.android.uploader.utils.ImageUtils;
 
 import java.util.List;
 
@@ -38,7 +39,8 @@ public class FailPhotoAdapter extends RecyclerView.Adapter<FailPhotoAdapter.Queu
         this.mPhotoItems = photos;
         this.mContext = context;
         if (mPlaceHolderBitmap == null) {
-            mPlaceHolderBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.fail);
+            mPlaceHolderBitmap = ImageUtils.decodeSampledBitmapFromResource(
+                    mContext.getResources(), R.drawable.fail, 96, 96);
         }
     }
 
@@ -59,9 +61,7 @@ public class FailPhotoAdapter extends RecyclerView.Adapter<FailPhotoAdapter.Queu
         holder.mNameTextView.setText(photo.getFlickrTitle());
 
         // we accept has UI flunky here :)
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = BitmapFactory.decodeFile(photo.getPath(), options);
+        Bitmap bitmap = ImageUtils.decodeSampledBitmapFromPath(photo.getPath(), 96, 96);
         if (bitmap == null) {
             holder.mImageView.setImageBitmap(mPlaceHolderBitmap);
         } else {
