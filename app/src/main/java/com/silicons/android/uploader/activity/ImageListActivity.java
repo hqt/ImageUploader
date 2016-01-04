@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -50,6 +51,7 @@ public class ImageListActivity extends AppCompatActivity
 
     private static final String TAG = makeLogTag(ImageListActivity.class);
 
+    private TextView mUsernameTextView;
     private FloatingActionButton mPhotoUploadButton;
     private FloatingActionButton mCameraUploadButton;
     private FloatingActionsMenu mGeneralFloatingButton;
@@ -57,6 +59,7 @@ public class ImageListActivity extends AppCompatActivity
     private NavigationView mNavigationView;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    private Toolbar mToolbar;
 
 
     // store photo path from camera
@@ -71,8 +74,8 @@ public class ImageListActivity extends AppCompatActivity
         setContentView(R.layout.activity_image_list);
 
         // set toolbar option
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_three_dot);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -85,11 +88,15 @@ public class ImageListActivity extends AppCompatActivity
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        View headerLayout = mNavigationView.getHeaderView(0);
+        mUsernameTextView = (TextView) headerLayout.findViewById(R.id.username_text_view);
 
         if (PrefStore.isFirstRun()) {
             Toast.makeText(this, "Temporary database will be created for demo.", Toast.LENGTH_LONG).show();
             PrefStore.setFirstRun(false);
         }
+
+        mUsernameTextView.setText(PrefStore.getFlickrUserName());
 
         // user must confirm everything
         setFinishOnTouchOutside(false);
@@ -165,6 +172,10 @@ public class ImageListActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void setTitle(CharSequence title) {
+        mToolbar.setTitle(title);
+    }
 
     //region Listener callback
     private View.OnClickListener mPhotoSelectClickListener = new View.OnClickListener() {

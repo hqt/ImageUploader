@@ -81,6 +81,7 @@ public class UploadedPhotoFragment extends Fragment implements UploadedPhotoAdap
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
             mActivity = (ImageListActivity) context;
+            mActivity.setTitle("Uploaded Photos");
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

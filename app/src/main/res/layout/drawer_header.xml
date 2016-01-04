@@ -21,7 +21,7 @@
         android:textSize="20sp"
         android:textStyle="normal"
         android:padding="5dp"
-        android:id="@+id/textview"
+        android:id="@+id/username_text_view"
         android:gravity="center"
         android:layout_margin="5dp"
         android:textColor="#fff"

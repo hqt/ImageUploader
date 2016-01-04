@@ -23,16 +23,6 @@
                 android:layout_weight="1"
                 />
 
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="?attr/colorPrimary"
-                android:textColor="#fff"
-                android:src="@drawable/ic_upload"
-                android:padding="5dip"
-                android:gravity="center"
-                android:id="@+id/btn_upload" />
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 

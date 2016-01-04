@@ -36,10 +36,18 @@ public class SettingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
+        //actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         toolbar.setTitle("Setting");
+
+        toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         mUploadedPhotoSpinner = (Spinner) findViewById(R.id.uploaded_sort_spinner);
         mFailedPhotoSpinner = (Spinner) findViewById(R.id.failed_sort_spinner);

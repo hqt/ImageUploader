@@ -5,7 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Toast;
 
 import com.silicons.android.uploader.R;
@@ -37,6 +40,22 @@ public class PhotoViewerActivity extends AppCompatActivity {
      protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_viewer);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        //actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("Preview Image");
+
+        toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         mImageView = (TouchImageView) findViewById(R.id.image_view);
 

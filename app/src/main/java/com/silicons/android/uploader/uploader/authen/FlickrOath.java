@@ -46,7 +46,7 @@ public class FlickrOath {
             oauthToken = oauth.getToken().getOauthToken();
             tokenSecret = oauth.getToken().getOauthTokenSecret();
             userId = oauth.getUser().getId();
-            userName = oauth.getUser().getRealName();
+            userName = oauth.getUser().getUsername();
         }
 
         PrefStore.setFlickrToken(oauthToken);

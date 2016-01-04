@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.silicons.android.uploader.R;
+import com.silicons.android.uploader.activity.ImageListActivity;
 
 public class FailUploadFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
+    private ImageListActivity mActivity;
 
     public FailUploadFragment() {
         // Required empty public constructor
@@ -41,6 +43,8 @@ public class FailUploadFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            mActivity = (ImageListActivity) context;
+            mActivity.setTitle("Failed upload photos");
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
