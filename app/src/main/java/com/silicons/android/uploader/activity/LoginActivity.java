@@ -36,15 +36,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (PrefStore.isFirstRun()) {
-            // create temporary database for demo purpose
-            // PrefStore.setFirstRun(false);
-            List<PhotoItem> photoItemList = Database.createDatabase();
-            for (PhotoItem photoItem : photoItemList) {
-                PhotoItemDAL.insertOrUpdatePhoto(photoItem);
-            }
-        }
-
         // if already login. switch to list activity
         if (PrefStore.isLogin()) {
             Log.e(TAG, "Authen token: " + PrefStore.getFlickrToken());

@@ -128,6 +128,24 @@ public class Database {
         photoItem.setStatus(UPLOADED);
         res.add(photoItem);
 
+        photoItem = new PhotoItem();
+        photoItem.setFlickrId("24059981105");
+        photoItem.setFlickrTitle("Hà Nội");
+        photoItem.setPath("C:/Windows/System32/");
+        photoItem.setSize(1024);
+        photoItem.setTimeCreated((new Date().getTime()));
+        photoItem.setStatus(FAILED);
+        res.add(photoItem);
+
+        photoItem = new PhotoItem();
+        photoItem.setFlickrId("24059981105");
+        photoItem.setFlickrTitle("Đà Nẵng");
+        photoItem.setPath("C:/Windows/System32/");
+        photoItem.setSize(1024);
+        photoItem.setTimeCreated((new Date().getTime()));
+        photoItem.setStatus(FAILED);
+        res.add(photoItem);
+
         return res;
     }
 }

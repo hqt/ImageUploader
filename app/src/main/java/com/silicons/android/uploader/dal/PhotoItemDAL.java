@@ -40,7 +40,7 @@ public class PhotoItemDAL {
         List<PhotoItem> res =  photos.subList(0, photos.size());
 
         // sort again based on user setting
-        Collections.sort(res, getFailedComparator());
+//        Collections.sort(res, getFailedComparator());
         return res;
     }
 

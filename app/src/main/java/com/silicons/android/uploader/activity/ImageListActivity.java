@@ -25,6 +25,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.adapter.PhotoPagerAdapter;
+import com.silicons.android.uploader.config.Database;
 import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.config.UploaderApplication;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
@@ -32,10 +33,12 @@ import com.silicons.android.uploader.fragment.FailUploadFragment;
 import com.silicons.android.uploader.fragment.QueuePhotoFragment;
 import com.silicons.android.uploader.fragment.UploadedPhotoFragment;
 import com.silicons.android.uploader.uploader.authen.FlickrOath;
+import com.silicons.android.uploader.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.DialogUtils;
 import com.silicons.android.uploader.utils.FileUtils;
 
 import java.io.File;
+import java.util.List;
 
 import static com.silicons.android.uploader.config.AppConstant.*;
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
@@ -94,6 +97,10 @@ public class ImageListActivity extends AppCompatActivity
         if (PrefStore.isFirstRun()) {
             Toast.makeText(this, "Temporary database will be created for demo.", Toast.LENGTH_LONG).show();
             PrefStore.setFirstRun(false);
+            List<PhotoItem> photoItemList = Database.createDatabase();
+            for (PhotoItem photoItem : photoItemList) {
+                PhotoItemDAL.insertOrUpdatePhoto(photoItem);
+            }
         }
 
         mUsernameTextView.setText(PrefStore.getFlickrUserName());

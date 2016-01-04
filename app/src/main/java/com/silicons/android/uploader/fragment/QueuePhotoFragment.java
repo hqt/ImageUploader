@@ -4,16 +4,34 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.activity.ImageListActivity;
+import com.silicons.android.uploader.adapter.QueuePhotoAdapter;
+import com.silicons.android.uploader.adapter.UploadedPhotoAdapter;
+import com.silicons.android.uploader.dal.PhotoItemDAL;
+import com.silicons.android.uploader.uploader.model.PhotoItem;
 
-public class QueuePhotoFragment extends Fragment {
+import java.util.List;
+
+import de.greenrobot.event.EventBus;
+
+public class QueuePhotoFragment extends Fragment implements QueuePhotoAdapter.IQueuePhotoItemListener {
     private OnFragmentInteractionListener mListener;
     private ImageListActivity mActivity;
+
+    private RecyclerView mPhotoRecycleView;
+
+    private List<PhotoItem> mPhotos;
+
+
+    private EventBus mBus = EventBus.getDefault();
 
     public QueuePhotoFragment() {
         // Required empty public constructor
@@ -33,7 +51,17 @@ public class QueuePhotoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_queue_photo, container, false);
+
+        View view =  inflater.inflate(R.layout.fragment_queue_photo, container, false);
+
+        mPhotoRecycleView = (RecyclerView) view.findViewById(R.id.queued_recycle_view);
+        mPhotoRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mPhotos = PhotoItemDAL.getAllQueuedPhotos();
+        QueuePhotoAdapter adapter = new QueuePhotoAdapter(this, mActivity, mPhotos);
+        mPhotoRecycleView.setAdapter(adapter);
+
+        return view;
     }
 
     @Override
@@ -55,6 +83,12 @@ public class QueuePhotoFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onClick(int position) {
+        Toast.makeText(mActivity, "Retry function is not implement.", Toast.LENGTH_SHORT).show();
+    }
+
     public interface OnFragmentInteractionListener {
+
     }
 }
