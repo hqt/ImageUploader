@@ -2,11 +2,9 @@ package com.silicons.android.uploader.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.silicons.android.uploader.R;
-import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
 import com.silicons.android.uploader.service.UploadingService;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
@@ -31,7 +28,6 @@ import java.io.IOException;
 
 import static com.silicons.android.uploader.config.AppConstant.*;
 import static com.silicons.android.uploader.config.AppConstant.FLICKR_SUPPORTED_EXTENSIONS;
-import static com.silicons.android.uploader.config.AppConstant.PhotoType.*;
 
 /**
  * preview and upload image screen

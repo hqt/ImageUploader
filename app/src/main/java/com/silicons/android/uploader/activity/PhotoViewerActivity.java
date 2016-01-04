@@ -1,10 +1,6 @@
 package com.silicons.android.uploader.activity;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,8 +12,6 @@ import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.task.flickr.ImageDownloadTask;
 import com.silicons.android.uploader.widgets.TouchImageView;
-
-import java.io.File;
 
 /** View detail uploaded photo
  * Created by Huynh Quang Thao on 12/30/15.

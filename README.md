@@ -44,16 +44,41 @@ Application for uploading images to Flickr Service. This application is for Sili
 
 # Extending Google Picassa Uploading Service
  **Note:** Picassa uses Oath2 and Flickr uses Oath for authentication. Nevertheless, This difference doesn't have big affect because we use built-in api libraries for those services.
- Here is some list API for implement Picassa upload function:
-- Processing between android and Picassa serice: Using <a href="https://developers.google.com/picasa-web/?hl=en">Picasa Web Albums API</a>
-- Login to Picasa Service:
-- Uploading API:
-- Download Photo API:
 
+## API Detail
+ Here is some list APIs for implementing Picassa upload function:
 
-My application provided for extending to other Photo Uploading Service by infrastructure decoupling between Activities (View) and other actions.
+### Processing between android and Picassa serice
+ Using <a href="https://developers.google.com/picasa-web/?hl=en">Picasa Web Albums API</a>
+
+### Login to Picasa Service
+
+### Uploading API 
+ - Link: <a href="https://developers.google.com/picasa-web/docs/2.0/developers_guide_java?csw=1#UploadPhotos">Uploading Photo API</a>
+ - Sample Code:
+ ```java
+URL albumPostUrl = new URL("https://picasaweb.google.com/data/feed/api/user/username/albumid/albumid");
+
+PhotoEntry myPhoto = new PhotoEntry();
+myPhoto.setTitle(new PlainTextConstruct("Puppies FTW"));
+myPhoto.setDescription(new PlainTextConstruct("Puppies are the greatest."));
+myPhoto.setClient("myClientName");
+
+MediaFileSource myMedia = new MediaFileSource(new File("/home/liz/puppies.jpg"), "image/jpeg");
+myPhoto.setMediaSource(myMedia);
+PhotoEntry returnedPhoto = myService.insert(albumPostUrl, myPhoto);
+```
+
+### Download Photo API
+
+## Architecture Detail
+This application also make easily for extending new uploaded services by decoupling between view(activity, fragment) and model(service, task, ...).
+In detail, application uses **Manager** class (based Factory Method design pattern) for choosing accurated implement classes. I decide not to choose some Dependency Injection frameworks (such as Dagger, Google Guice) because maybe application will be supports both two services at Runtime.
+- **TaskManager:** Management how should generate a task for an View. 
+
+Base on above assumptions, this application needs from 2-3 days for extending Picasa uploading function including intergration testing time.
 
 # Testing
 Testing project is stored under `src/test`. I create two sample test screen : `SettingActivity` and `ImageListActivity`. Using two main libraries:
  - **JUnit4** for unit test
- - **espresso** for instrument testing
+ - **espresso** and **espresso-intent** for instrument testing
