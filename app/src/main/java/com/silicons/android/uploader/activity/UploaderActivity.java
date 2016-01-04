@@ -3,6 +3,8 @@ package com.silicons.android.uploader.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -22,6 +25,7 @@ import com.silicons.android.uploader.service.UploadingService;
 import com.silicons.android.uploader.task.flickr.PhotoUploadTask;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.FileUtils;
+import com.silicons.android.uploader.utils.ImageUtils;
 import com.silicons.android.uploader.utils.NetworkUtils;
 import com.silicons.android.uploader.widgets.TouchImageView;
 
@@ -128,23 +132,24 @@ public class UploaderActivity extends AppCompatActivity {
     }
 
     private void parseImageFromUri(Uri uri) {
-        try {
-            mPhotoItem = new PhotoItem();
+        mPhotoItem = new PhotoItem();
 
-            mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-            String filePath = FileUtils.getRealPathFromURI(uri);
-            mFileName = new File(filePath).getName();
+        String filePath = FileUtils.getRealPathFromURI(uri);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        mBitmap = ImageUtils.decodeSampledBitmapFromPath(filePath, width, height);
+        mFileName = new File(filePath).getName();
 
-            // create information for photo item
-            mPhotoItem.setPath(filePath);
-            mPhotoItem.setSize(mBitmap.getByteCount());
-            mPhotoItem.setFlickrTitle(mFileName);
-            Log.e("hqthao",toString(mPhotoItem));
+        // create information for photo item
+        mPhotoItem.setPath(filePath);
+        mPhotoItem.setSize(mBitmap.getByteCount());
+        mPhotoItem.setFlickrTitle(mFileName);
+        Log.e("hqthao",toString(mPhotoItem));
 
-            mImageView.setImageBitmap(mBitmap);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mImageView.setImageBitmap(mBitmap);
     }
 
     private void parseImageFromPath(String path) {

@@ -4,14 +4,15 @@ Application for uploading images to Flickr Service. This application is for Sili
 # This application provided:
 - Uploading images to Flickr service 
 - Supporting queue upload images for uploading multi images.
-- Preview and view images before uploading.
+- Preview before uploading.
 - Can easily extend to upload to Picasa service.
+- Using File cache, memory cache and optimize image for increasing performance.
 
 # What it looks like
 
 <table>
   <tr>
-    <td><b>Login Screen/b></td>
+    <td><b>Login Screen</b>></td>
     <td><b>Uploaded Photo Screen</b></td>
     <td><b>Queue Photo Screen</b></td>
   </tr>

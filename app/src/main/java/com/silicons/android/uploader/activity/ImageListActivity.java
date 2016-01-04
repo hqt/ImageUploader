@@ -263,8 +263,7 @@ public class ImageListActivity extends AppCompatActivity
                                         PrefStore.setFailSortType(0);
                                         PrefStore.setUploadSortType(0);
                                         PrefStore.setProviderMode(ImageProviderMode.FLICKR);
-                                        UploaderApplication.getImageDiskCache().clearCache();
-                                        UploaderApplication.getImageMemoryCache().clearCache();
+                                        // UploaderApplication.getImageMemoryCache().clearCache();
                                     }
 
                                     Intent intent = new Intent(ImageListActivity.this,

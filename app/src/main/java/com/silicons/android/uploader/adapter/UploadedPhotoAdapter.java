@@ -99,7 +99,7 @@ public class UploadedPhotoAdapter extends RecyclerView.Adapter<UploadedPhotoAdap
         // by creating new task for this image view
         Log.e(TAG, photo.getFlickrTitle() + " need to download");
         ImageDownloadTask task = new ImageDownloadTask(mContext, holder.mImageView,
-                photo.getFlickrId(), AppConstant.PhotoType.PHOTO_ID_MEDIUM, false);
+                photo.getFlickrId(), AppConstant.PhotoType.PHOTO_ID_SMALL, false);
         AsyncDrawable asyncDrawable = new AsyncDrawable(mContext.getResources(), mPlaceHolderBitmap, task);
         holder.mImageView.setImageDrawable(asyncDrawable);
         task.execute();
