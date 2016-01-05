@@ -17,7 +17,7 @@ import com.googlecode.flickrjandroid.photos.PhotosInterface;
 import com.silicons.android.uploader.config.AppConstant.PhotoType;
 import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.config.UploaderApplication;
-import com.silicons.android.uploader.uploader.manager.FlickrHelper;
+import com.silicons.android.uploader.manager.FlickrHelper;
 import com.silicons.android.uploader.utils.ImageUtils;
 import com.silicons.android.uploader.utils.NetworkUtils;
 

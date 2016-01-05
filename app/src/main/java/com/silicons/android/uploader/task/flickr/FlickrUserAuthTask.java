@@ -15,7 +15,7 @@ import com.googlecode.flickrjandroid.oauth.OAuthToken;
 import com.googlecode.flickrjandroid.people.User;
 import com.silicons.android.uploader.activity.ImageListActivity;
 import com.silicons.android.uploader.activity.LoginActivity;
-import com.silicons.android.uploader.uploader.manager.FlickrHelper;
+import com.silicons.android.uploader.manager.FlickrHelper;
 import com.silicons.android.uploader.uploader.authen.FlickrOath;
 
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;

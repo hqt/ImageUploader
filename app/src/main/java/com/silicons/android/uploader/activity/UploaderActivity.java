@@ -16,7 +16,7 @@ import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.action.uploader.UploaderAction;
 import com.silicons.android.uploader.config.ActionConstant;
 import com.silicons.android.uploader.config.UploaderApplication;
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.FileUtils;
 import com.silicons.android.uploader.utils.ImageUtils;
 import com.silicons.android.uploader.widgets.TouchImageView;

@@ -15,7 +15,7 @@ import com.googlecode.flickrjandroid.oauth.OAuthToken;
 import com.silicons.android.uploader.activity.LoginActivity;
 import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.PrefStore;
-import com.silicons.android.uploader.uploader.manager.FlickrHelper;
+import com.silicons.android.uploader.manager.FlickrHelper;
 
 import java.net.URL;
 

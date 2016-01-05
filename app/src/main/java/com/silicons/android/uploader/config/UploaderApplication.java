@@ -6,8 +6,8 @@ import android.graphics.Bitmap;
 
 import com.silicons.android.uploader.cache.DiskLruImageCache;
 import com.silicons.android.uploader.cache.MemoryImageCache;
-import com.silicons.android.uploader.uploader.manager.action.ActionManagerHandler;
-import com.silicons.android.uploader.uploader.manager.action.IActionManager;
+import com.silicons.android.uploader.manager.action.ActionManagerHandler;
+import com.silicons.android.uploader.manager.action.IActionManager;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;

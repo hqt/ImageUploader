@@ -2,7 +2,7 @@ package com.silicons.android.uploader.action.uploader;
 
 import com.silicons.android.uploader.action.IAction;
 import com.silicons.android.uploader.activity.UploaderActivity;
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.model.PhotoItem;
 
 /**
  * Created by Huynh Quang Thao on 1/5/16.

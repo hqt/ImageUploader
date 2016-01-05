@@ -3,11 +3,10 @@ package com.silicons.android.uploader.action.uploader;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.silicons.android.uploader.activity.UploaderActivity;
 import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
 import com.silicons.android.uploader.service.FlickrUploadingService;
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.FileUtils;
 import com.silicons.android.uploader.utils.NetworkUtils;
 

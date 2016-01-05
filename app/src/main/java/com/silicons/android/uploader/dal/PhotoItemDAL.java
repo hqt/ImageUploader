@@ -2,7 +2,7 @@ package com.silicons.android.uploader.dal;
 
 import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.PrefStore;
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.model.PhotoItem;
 
 import java.util.Comparator;
 import java.util.Date;

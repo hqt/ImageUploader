@@ -1,10 +1,8 @@
-package com.silicons.android.uploader.uploader.manager.action;
+package com.silicons.android.uploader.manager.action;
 
 import com.silicons.android.uploader.action.IAction;
 import com.silicons.android.uploader.action.uploader.FlickrUploaderAction;
-import com.silicons.android.uploader.action.uploader.UploaderAction;
 import com.silicons.android.uploader.action.viewer.FlickrViewerAction;
-import com.silicons.android.uploader.config.ActionConstant;
 import com.silicons.android.uploader.config.ActionConstant.Flickr;
 
 /**

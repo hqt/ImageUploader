@@ -18,7 +18,7 @@ import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.config.UploaderApplication;
 import com.silicons.android.uploader.task.flickr.FlickrImageDownloadTask;
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.DateUtils;
 import com.silicons.android.uploader.utils.ImageUtils;
 import com.silicons.android.uploader.widgets.AsyncDrawable;

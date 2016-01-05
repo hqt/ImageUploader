@@ -2,7 +2,6 @@ package com.silicons.android.uploader.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.silicons.android.uploader.R;
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.DateUtils;
 import com.silicons.android.uploader.utils.ImageUtils;
 

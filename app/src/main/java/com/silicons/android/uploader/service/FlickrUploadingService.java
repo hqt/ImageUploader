@@ -14,8 +14,8 @@ import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
 import com.silicons.android.uploader.model.FailedPhotoNotify;
 import com.silicons.android.uploader.model.UploadedPhotoNotify;
-import com.silicons.android.uploader.uploader.manager.FlickrHelper;
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.manager.FlickrHelper;
+import com.silicons.android.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.NotificationUtils;
 
 import java.io.File;

@@ -4,30 +4,21 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.activity.ImageListActivity;
-import com.silicons.android.uploader.activity.LoginActivity;
 import com.silicons.android.uploader.activity.PhotoViewerActivity;
-import com.silicons.android.uploader.activity.UploaderActivity;
-import com.silicons.android.uploader.adapter.FailPhotoAdapter;
 import com.silicons.android.uploader.adapter.UploadedPhotoAdapter;
-import com.silicons.android.uploader.config.AppConstant;
-import com.silicons.android.uploader.config.PrefStore;
-import com.silicons.android.uploader.config.UploaderApplication;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
 import com.silicons.android.uploader.model.UploadedPhotoNotify;
-import com.silicons.android.uploader.uploader.authen.FlickrOath;
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.model.PhotoItem;
 
 import java.util.List;
 

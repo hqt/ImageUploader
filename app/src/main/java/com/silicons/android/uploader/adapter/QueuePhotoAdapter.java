@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.silicons.android.uploader.R;
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.DateUtils;
 import com.silicons.android.uploader.utils.ImageUtils;
 

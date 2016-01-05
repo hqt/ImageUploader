@@ -1,4 +1,4 @@
-package com.silicons.android.uploader.uploader.manager;
+package com.silicons.android.uploader.manager;
 
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 

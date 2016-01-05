@@ -1,4 +1,4 @@
-package com.silicons.android.uploader.uploader.model;
+package com.silicons.android.uploader.model;
 
 import com.silicons.android.uploader.config.AppConstant.PhotoStatus;
 

@@ -1,9 +1,6 @@
 package com.silicons.android.uploader.fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,12 +13,9 @@ import android.widget.Toast;
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.activity.ImageListActivity;
 import com.silicons.android.uploader.adapter.FailPhotoAdapter;
-import com.silicons.android.uploader.adapter.QueuePhotoAdapter;
-import com.silicons.android.uploader.adapter.UploadedPhotoAdapter;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
 import com.silicons.android.uploader.model.FailedPhotoNotify;
-import com.silicons.android.uploader.model.UploadedPhotoNotify;
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.model.PhotoItem;
 
 import java.util.List;
 

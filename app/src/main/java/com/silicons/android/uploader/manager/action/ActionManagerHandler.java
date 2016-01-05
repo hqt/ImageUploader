@@ -1,4 +1,4 @@
-package com.silicons.android.uploader.uploader.manager.action;
+package com.silicons.android.uploader.manager.action;
 
 import com.silicons.android.uploader.config.AppConstant.ImageProviderMode;
 

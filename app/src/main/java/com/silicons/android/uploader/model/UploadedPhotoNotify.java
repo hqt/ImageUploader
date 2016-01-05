@@ -1,7 +1,5 @@
 package com.silicons.android.uploader.model;
 
-import com.silicons.android.uploader.uploader.model.PhotoItem;
-
 /**
  * Created by Huynh Quang Thao on 1/4/16.
  */

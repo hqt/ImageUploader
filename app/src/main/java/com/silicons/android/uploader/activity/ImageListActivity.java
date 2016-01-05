@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -29,24 +27,21 @@ import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.adapter.PhotoPagerAdapter;
 import com.silicons.android.uploader.config.Database;
 import com.silicons.android.uploader.config.PrefStore;
-import com.silicons.android.uploader.config.UploaderApplication;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
 import com.silicons.android.uploader.fragment.FailUploadFragment;
 import com.silicons.android.uploader.fragment.QueuePhotoFragment;
 import com.silicons.android.uploader.fragment.UploadedPhotoFragment;
 import com.silicons.android.uploader.uploader.authen.FlickrOath;
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.DialogUtils;
 import com.silicons.android.uploader.utils.FileUtils;
-import com.silicons.android.uploader.utils.ImageUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static com.silicons.android.uploader.config.AppConstant.*;
+import static com.silicons.android.uploader.config.AppConstant.ImageProviderMode;
+import static com.silicons.android.uploader.config.AppConstant.IntentCode;
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 
 /**

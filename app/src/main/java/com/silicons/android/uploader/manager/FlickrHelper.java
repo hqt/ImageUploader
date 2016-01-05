@@ -1,4 +1,4 @@
-package com.silicons.android.uploader.uploader.manager;
+package com.silicons.android.uploader.manager;
 
 import com.googlecode.flickrjandroid.Flickr;
 import com.googlecode.flickrjandroid.REST;

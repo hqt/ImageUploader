@@ -1,7 +1,6 @@
 package com.silicons.android.uploader.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,14 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.silicons.android.uploader.R;
 import com.silicons.android.uploader.activity.ImageListActivity;
 import com.silicons.android.uploader.adapter.QueuePhotoAdapter;
-import com.silicons.android.uploader.adapter.UploadedPhotoAdapter;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.model.PhotoItem;
 
 import java.util.List;
 

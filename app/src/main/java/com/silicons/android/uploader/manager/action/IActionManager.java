@@ -1,6 +1,4 @@
-package com.silicons.android.uploader.uploader.manager.action;
-
-import android.os.AsyncTask;
+package com.silicons.android.uploader.manager.action;
 
 import com.silicons.android.uploader.action.IAction;
 

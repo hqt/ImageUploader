@@ -1,6 +1,6 @@
 package com.silicons.android.uploader.config;
 
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.model.PhotoItem;
 
 import java.util.ArrayList;
 import java.util.Date;
