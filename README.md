@@ -5,7 +5,7 @@ Application for uploading images to Flickr Service. This application is for Sili
 - Uploading images to Flickr service 
 - Supporting queue upload images for uploading multi images.
 - Preview before uploading.
-- Can easily extend to upload to Picasa service.
+- Structure project so can easily extend to another upload service (such as Picasa).
 - Using File cache, memory cache and optimize image for increasing performance.
 
 # What it looks like
@@ -44,6 +44,15 @@ Application for uploading images to Flickr Service. This application is for Sili
 
 # Extending Google Picassa Uploading Service
  **Note:** Picassa uses Oath2 and Flickr uses Oath for authentication. Nevertheless, This difference doesn't have big affect because we use built-in api libraries for those services.
+
+
+## Architecture Detail
+- This application also make easily for extending new uploaded services by decoupling between **view**(activity, fragment) and **model**(service, task, ...).
+- In detail, application uses **ActionManagerHandler** for choosing **FlickrActionManager** or **PicasaActionManager**. Those manager classes (based Factory Method design pattern) decide approciate actions for view. I decide not to choose some Dependency Injection frameworks (such as Dagger, Google Guice) because maybe application will be supports both two services at Runtime.
+- In case implement Picasa service. You will need implement:
+  - **PicasaActionManager:** base on query string, decide how to choose approciate actions.
+  - ****
+
 
 ## API Detail
  Here is some list APIs for implementing Picassa upload function:
@@ -92,12 +101,7 @@ for(PhotoEntry photo : feed.getPhotoEntries()) {
 }
  ```
 
-## Architecture Detail
-This application also make easily for extending new uploaded services by decoupling between view(activity, fragment) and model(service, task, ...).
-In detail, application uses **Manager** class (based Factory Method design pattern) for choosing accurated implement classes. I decide not to choose some Dependency Injection frameworks (such as Dagger, Google Guice) because maybe application will be supports both two services at Runtime.
-- **TaskManager:** Management how should generate a task for an View. 
-
-Base on above assumptions, this application needs from 2-3 days for extending Picasa uploading function including intergration testing time.
+Base on above assumptions, this application needs from 3-4 days for extending Picasa uploading function including intergration testing time.
 
 # Testing
 Testing project is stored under `src/test`. I create two sample test screen : `SettingActivity` and `ImageListActivity`. Using two main libraries:
