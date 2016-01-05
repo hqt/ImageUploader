@@ -24,14 +24,14 @@ import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 /** Task for getting user's token. This is the must for some action such as getting protected resource
  * Created by Huynh Quang Thao on 12/31/15.
  */
-public class OAuthTask extends AsyncTask<Void, Integer, String> {
+public class FlickrOAuthTask extends AsyncTask<Void, Integer, String> {
 
-    private final String TAG = makeLogTag(OAuthTask.class);
+    private final String TAG = makeLogTag(FlickrOAuthTask.class);
 
     private ProgressDialog mProgressDialog;
     private Context mContext;
 
-    public OAuthTask(Context context) {
+    public FlickrOAuthTask(Context context) {
         this.mContext = context;
     }
 
@@ -44,7 +44,7 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
         mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dlg) {
-                OAuthTask.this.cancel(true);
+                FlickrOAuthTask.this.cancel(true);
             }
         });
     }

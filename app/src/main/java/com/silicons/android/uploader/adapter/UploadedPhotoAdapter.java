@@ -17,7 +17,7 @@ import com.silicons.android.uploader.cache.MemoryImageCache;
 import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.config.UploaderApplication;
-import com.silicons.android.uploader.task.flickr.ImageDownloadTask;
+import com.silicons.android.uploader.task.flickr.FlickrImageDownloadTask;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.DateUtils;
 import com.silicons.android.uploader.utils.ImageUtils;
@@ -99,7 +99,7 @@ public class UploadedPhotoAdapter extends RecyclerView.Adapter<UploadedPhotoAdap
         // else. try to download new image
         // by creating new task for this image view
         Log.e(TAG, photo.getFlickrTitle() + " need to download");
-        ImageDownloadTask task = new ImageDownloadTask(mContext, holder.mImageView,
+        FlickrImageDownloadTask task = new FlickrImageDownloadTask(mContext, holder.mImageView,
                 photo.getFlickrId(), AppConstant.PhotoType.PHOTO_ID_SMALL, false);
         AsyncDrawable asyncDrawable = new AsyncDrawable(mContext.getResources(), mPlaceHolderBitmap, task);
         holder.mImageView.setImageDrawable(asyncDrawable);

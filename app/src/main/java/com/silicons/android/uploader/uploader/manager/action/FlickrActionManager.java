@@ -3,6 +3,7 @@ package com.silicons.android.uploader.uploader.manager.action;
 import com.silicons.android.uploader.action.IAction;
 import com.silicons.android.uploader.action.uploader.FlickrUploaderAction;
 import com.silicons.android.uploader.action.uploader.UploaderAction;
+import com.silicons.android.uploader.action.viewer.FlickrViewerAction;
 import com.silicons.android.uploader.config.ActionConstant;
 import com.silicons.android.uploader.config.ActionConstant.Flickr;
 
@@ -16,6 +17,8 @@ public class FlickrActionManager implements IActionManager {
         switch (action) {
             case Flickr.UPLOADING_ACTION:
             return new FlickrUploaderAction();
+            case Flickr.VIEWER_ACTION:
+                return new FlickrViewerAction();
         }
         return null;
     }

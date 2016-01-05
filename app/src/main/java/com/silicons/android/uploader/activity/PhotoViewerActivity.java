@@ -9,8 +9,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.silicons.android.uploader.R;
-import com.silicons.android.uploader.config.AppConstant;
-import com.silicons.android.uploader.task.flickr.ImageDownloadTask;
+import com.silicons.android.uploader.action.viewer.ViewerAction;
+import com.silicons.android.uploader.config.ActionConstant;
+import com.silicons.android.uploader.config.UploaderApplication;
 import com.silicons.android.uploader.widgets.TouchImageView;
 
 /** View detail uploaded photo
@@ -31,10 +32,17 @@ public class PhotoViewerActivity extends AppCompatActivity {
 
     String samplePhotoId = "24080343646";
 
+    private ViewerAction mAction;
+
     @Override
      protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_viewer);
+
+        mAction = (ViewerAction) UploaderApplication.getActionManager()
+                .getAction(ActionConstant.Flickr.VIEWER_ACTION);
+        mAction.setActivity(this);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,12 +65,9 @@ public class PhotoViewerActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         String photoId = extras.getString("photo_id");
         if (photoId != null) {
-            ImageDownloadTask task = new ImageDownloadTask(this, mImageView, photoId,
-                    AppConstant.PhotoType.PHOTO_ID_LARGE, true);
-            task.execute();
+            mAction.download(mImageView, photoId);
         } else {
             Toast.makeText(this, "No photo for display.", Toast.LENGTH_SHORT).show();
         }
-
     }
 }

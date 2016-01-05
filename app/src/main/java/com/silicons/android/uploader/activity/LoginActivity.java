@@ -14,19 +14,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.silicons.android.uploader.R;
-import com.silicons.android.uploader.cache.MemoryImageCache;
 import com.silicons.android.uploader.config.AppConstant;
-import com.silicons.android.uploader.config.Database;
 import com.silicons.android.uploader.config.PrefStore;
-import com.silicons.android.uploader.config.UploaderApplication;
-import com.silicons.android.uploader.dal.PhotoItemDAL;
-import com.silicons.android.uploader.task.flickr.OAuthTask;
-import com.silicons.android.uploader.task.flickr.UserAuthTask;
-import com.silicons.android.uploader.uploader.model.PhotoItem;
+import com.silicons.android.uploader.task.flickr.FlickrOAuthTask;
+import com.silicons.android.uploader.task.flickr.FlickrUserAuthTask;
 import com.silicons.android.uploader.utils.ImageUtils;
 import com.silicons.android.uploader.utils.NetworkUtils;
-
-import java.util.List;
 
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 
@@ -75,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // first step. authentication for getting token
                 if (NetworkUtils.isNetworkAvailable()) {
-                    new OAuthTask(LoginActivity.this).execute();
+                    new FlickrOAuthTask(LoginActivity.this).execute();
                 } else {
                     Toast.makeText(LoginActivity.this, R.string.network_not_available_message,
                             Toast.LENGTH_SHORT).show();
@@ -108,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                 String oauthSecret = PrefStore.getFlickTokenSecret();
                 if (oauthSecret != null) {
                     if (NetworkUtils.isNetworkAvailable()) {
-                        UserAuthTask task = new UserAuthTask(this, oauthToken, oauthSecret, oauthVerifier);
+                        FlickrUserAuthTask task = new FlickrUserAuthTask(this, oauthToken, oauthSecret, oauthVerifier);
                         task.execute();
                     } else {
                         Toast.makeText(LoginActivity.this, R.string.network_not_available_message,

@@ -6,6 +6,7 @@ package com.silicons.android.uploader.config;
 public class ActionConstant {
     public static class Flickr {
         public static final String UPLOADING_ACTION = "uploading_action";
+        public static final String VIEWER_ACTION = "viewer_action";
     }
 
     public static class Picasa {

@@ -10,33 +10,24 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.googlecode.flickrjandroid.Flickr;
-import com.googlecode.flickrjandroid.FlickrException;
-import com.googlecode.flickrjandroid.photos.Photo;
 import com.googlecode.flickrjandroid.uploader.UploadMetaData;
-import com.googlecode.flickrjandroid.uploader.Uploader;
 import com.silicons.android.uploader.activity.ImageListActivity;
 import com.silicons.android.uploader.activity.UploaderActivity;
 import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.uploader.manager.FlickrHelper;
 import com.silicons.android.uploader.utils.FileUtils;
 
-import org.xml.sax.SAXException;
-
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 
 import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 
 /** Task for uploading photo to flickr
  * Created by Huynh Quang Thao on 12/31/15.
  */
-public class PhotoUploadTask extends AsyncTask<Void, Void, String> {
+public class FlickrPhotoUploadTask extends AsyncTask<Void, Void, String> {
 
-    private static final String TAG = makeLogTag(PhotoUploadTask.class);
+    private static final String TAG = makeLogTag(FlickrPhotoUploadTask.class);
 
     private ProgressDialog mProgressDialog;
     private Context mContext;
@@ -46,7 +37,7 @@ public class PhotoUploadTask extends AsyncTask<Void, Void, String> {
     private UploadMetaData mUploadMetaData;
     private Uri mUri;
 
-    public PhotoUploadTask(Context context, String imageName, byte[] data, Uri uri, UploadMetaData uploadMetaData) {
+    public FlickrPhotoUploadTask(Context context, String imageName, byte[] data, Uri uri, UploadMetaData uploadMetaData) {
         this.mContext = context;
         this.mImageName = imageName;
         this.mData = data;
@@ -63,7 +54,7 @@ public class PhotoUploadTask extends AsyncTask<Void, Void, String> {
         mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dlg) {
-                PhotoUploadTask.this.cancel(true);
+                FlickrPhotoUploadTask.this.cancel(true);
             }
         });
     }

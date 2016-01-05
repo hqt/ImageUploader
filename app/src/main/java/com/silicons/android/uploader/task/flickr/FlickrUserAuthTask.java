@@ -23,9 +23,9 @@ import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 /** Task for getting username and user id after get user's token
  * Created by Huynh Quang Thao on 12/31/15.
  */
-public class UserAuthTask extends AsyncTask<Void, Integer, OAuth> {
+public class FlickrUserAuthTask extends AsyncTask<Void, Integer, OAuth> {
 
-    private static final String TAG = makeLogTag(UserAuthTask.class);
+    private static final String TAG = makeLogTag(FlickrUserAuthTask.class);
 
     private Context mContext;
     private String mOauthToken;
@@ -34,7 +34,7 @@ public class UserAuthTask extends AsyncTask<Void, Integer, OAuth> {
 
     private ProgressDialog mProgressDialog;
 
-    public UserAuthTask(Context context, String oauthToken, String oauthSecret, String oauthVerifier) {
+    public FlickrUserAuthTask(Context context, String oauthToken, String oauthSecret, String oauthVerifier) {
         this.mContext = context;
         this.mOauthToken = oauthToken;
         this.mOauthTokenSecret = oauthSecret;
@@ -50,7 +50,7 @@ public class UserAuthTask extends AsyncTask<Void, Integer, OAuth> {
         mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dlg) {
-                UserAuthTask.this.cancel(true);
+                FlickrUserAuthTask.this.cancel(true);
             }
         });
     }

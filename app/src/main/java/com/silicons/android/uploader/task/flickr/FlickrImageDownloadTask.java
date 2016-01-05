@@ -13,9 +13,7 @@ import android.widget.ImageView;
 import com.googlecode.flickrjandroid.Flickr;
 import com.googlecode.flickrjandroid.FlickrException;
 import com.googlecode.flickrjandroid.photos.Photo;
-import com.googlecode.flickrjandroid.photos.PhotoList;
 import com.googlecode.flickrjandroid.photos.PhotosInterface;
-import com.googlecode.flickrjandroid.photos.SearchParameters;
 import com.silicons.android.uploader.config.AppConstant.PhotoType;
 import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.config.UploaderApplication;
@@ -37,9 +35,9 @@ import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
  * Created by Huynh Quang Thao on 1/2/16.
  */
 
-public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
+public class FlickrImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
 
-    private static final String TAG = makeLogTag(ImageDownloadTask.class);
+    private static final String TAG = makeLogTag(FlickrImageDownloadTask.class);
 
     private WeakReference<ImageView> mImageReference = null;
 
@@ -56,8 +54,8 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
     // should display progress to ui or not
     private boolean mIsDisplayProgress;
 
-    public ImageDownloadTask(Context context, ImageView imageView, String photoId,
-                             int photoType, boolean displayProgress) {
+    public FlickrImageDownloadTask(Context context, ImageView imageView, String photoId,
+                                   int photoType, boolean displayProgress) {
         this.mContext = context;
         this.mImageReference = new WeakReference<ImageView>(imageView);
         this.mPhotoId = photoId;
@@ -82,7 +80,7 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
         mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dlg) {
-                ImageDownloadTask.this.cancel(true);
+                FlickrImageDownloadTask.this.cancel(true);
             }
         });
     }
@@ -188,7 +186,7 @@ public class ImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
 
             // in multi-mode. maybe there are many asynctask run parallel
             // get the latest task of this image view for checking
-            ImageDownloadTask imageDownloadTask = ImageUtils.getPhotoDownloadTask(imageView);
+            FlickrImageDownloadTask imageDownloadTask = ImageUtils.getPhotoDownloadTask(imageView);
             if ((this == imageDownloadTask) && (imageView != null)) {
                 imageView.setImageBitmap(result);
             }
