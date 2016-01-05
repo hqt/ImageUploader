@@ -1,6 +1,5 @@
 package com.silicons.android.uploader.activity;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.net.Uri;
@@ -12,22 +11,19 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.silicons.android.uploader.R;
-import com.silicons.android.uploader.dal.PhotoItemDAL;
-import com.silicons.android.uploader.service.UploadingService;
+import com.silicons.android.uploader.action.uploader.UploaderAction;
+import com.silicons.android.uploader.config.ActionConstant;
+import com.silicons.android.uploader.config.UploaderApplication;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
 import com.silicons.android.uploader.utils.FileUtils;
 import com.silicons.android.uploader.utils.ImageUtils;
-import com.silicons.android.uploader.utils.NetworkUtils;
 import com.silicons.android.uploader.widgets.TouchImageView;
 
 import java.io.File;
-import java.io.IOException;
 
-import static com.silicons.android.uploader.config.AppConstant.*;
-import static com.silicons.android.uploader.config.AppConstant.FLICKR_SUPPORTED_EXTENSIONS;
+import static com.silicons.android.uploader.config.AppConstant.PhotoType;
 
 /**
  * preview and upload image screen
@@ -50,10 +46,16 @@ public class UploaderActivity extends AppCompatActivity {
     // PhotoItem. used for persistence to database
     private PhotoItem mPhotoItem;
 
+    private UploaderAction mUploaderAction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_image);
+
+        mUploaderAction = (UploaderAction) UploaderApplication.getActionManager()
+                .getAction(ActionConstant.Flickr.UPLOADING_ACTION);
+        mUploaderAction.setActivity(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,40 +88,7 @@ public class UploaderActivity extends AppCompatActivity {
         mUploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // validate image before upload
-                String errorMessage = null;
-                String extension = FileUtils.getExtension(mPhotoItem);
-                String uri = mPhotoItem.getPath();
-                File file = new File(uri);
-                if (!FLICKR_SUPPORTED_EXTENSIONS.contains(extension)) {
-                    errorMessage = "This file extension is not supported";
-                } else if (!file.exists()) {
-                    errorMessage = "File no longer exist";
-                } else if (file.length() <= 10) {
-                    errorMessage = "File is empty";
-                } else if (file.length() > 1024 * 1024 * 1024L) {
-                    errorMessage = "File too big";
-                } else if (!NetworkUtils.isNetworkAvailable()) {
-                    errorMessage = "Network not available now. Please try again later";
-                }
-
-                if (errorMessage != null) {
-                    Toast.makeText(UploaderActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // write to database first
-                mPhotoItem.setStatus(PhotoStatus.QUEUED);
-                PhotoItemDAL.insertOrUpdatePhoto(mPhotoItem);
-
-                // trigger intent service for uploading. uploading photos will put into queue
-                Intent intent = new Intent(getApplicationContext(), UploadingService.class);
-                intent.putExtra("photo", mPhotoItem);
-                startService(intent);
-
-                // go back previous activity
-                finish();
-
+                mUploaderAction.upload(mPhotoItem);
             }
         });
     }
@@ -158,7 +127,7 @@ public class UploaderActivity extends AppCompatActivity {
             int width = size.x;
             int height = size.y;
             mBitmap = ImageUtils.decodeSampledBitmapFromPath(filePath, width, height);
-            mFileName = new File(filePath).getName();
+            mFileName = file.getName();
 
             // create information for photo item
             mPhotoItem.setPath(filePath);

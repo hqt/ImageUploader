@@ -1,36 +1,26 @@
 package com.silicons.android.uploader.service;
 
 import android.app.IntentService;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Handler;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.googlecode.flickrjandroid.Flickr;
 import com.googlecode.flickrjandroid.uploader.UploadMetaData;
-import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.AppConstant.PhotoStatus;
 import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
 import com.silicons.android.uploader.model.FailedPhotoNotify;
-import com.silicons.android.uploader.model.QueuedPhotoNotify;
 import com.silicons.android.uploader.model.UploadedPhotoNotify;
 import com.silicons.android.uploader.uploader.manager.FlickrHelper;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
-import com.silicons.android.uploader.utils.FileUtils;
-import com.silicons.android.uploader.utils.NetworkUtils;
 import com.silicons.android.uploader.utils.NotificationUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.greenrobot.event.EventBus;
 
@@ -39,9 +29,9 @@ import static com.silicons.android.uploader.utils.LogUtils.makeLogTag;
 /** Uploading Image Service. Using for upload to Flickr.
  * Created by Huynh Quang Thao on 1/1/16.
  */
-public class UploadingService extends IntentService {
+public class FlickrUploadingService extends IntentService {
 
-    private static final String TAG = makeLogTag(UploadingService.class);
+    private static final String TAG = makeLogTag(FlickrUploadingService.class);
 
     // EventBus for sending data back to activity. Faster than using BroastCastReceiver
     private EventBus mBus;
@@ -58,8 +48,8 @@ public class UploadingService extends IntentService {
     // Because IntentService runs from different thread
     private Handler mHandler;
 
-    public UploadingService() {
-        super(UploadingService.class.getName());
+    public FlickrUploadingService() {
+        super(FlickrUploadingService.class.getName());
     }
 
     @Override
@@ -70,6 +60,7 @@ public class UploadingService extends IntentService {
         mBus = EventBus.getDefault();
         mHandler = new Handler();
     }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         mPhoto = (PhotoItem) intent.getSerializableExtra("photo");

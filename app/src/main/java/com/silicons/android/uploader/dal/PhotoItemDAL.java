@@ -4,11 +4,9 @@ import com.silicons.android.uploader.config.AppConstant;
 import com.silicons.android.uploader.config.PrefStore;
 import com.silicons.android.uploader.uploader.model.PhotoItem;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
