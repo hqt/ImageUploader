@@ -50,9 +50,29 @@ Application for uploading images to Flickr Service. This application is for Sili
 - This application also make easily for extending new uploaded services by decoupling between **view**(activity, fragment) and **model**(service, task, ...).
 - In detail, application uses **ActionManagerHandler** for choosing **FlickrActionManager** or **PicasaActionManager**. Those manager classes (based Factory Method design pattern) decide approciate actions for view. I decide not to choose some Dependency Injection frameworks (such as Dagger, Google Guice) because maybe application will be supports both two services at Runtime.
 - In case implement Picasa service. You will need implement:
-  - **PicasaActionManager:** base on query string, decide how to choose approciate actions.
-  - ****
+  - **com.silicons.android.uploader.action.uploaded.PicasaUploadedAction:** display list of uploaded photos
+  - **com.silicons.android.uploader.action.uploaded.PicasaUploaderAction:** using for uploading photos to Picasa server
+  - **com.silicons.android.uploader.action.uploaded.PicasaViewerAction:** Using for display single photos from Picasa. Display single photo will download a larger images for user.
+  - Add another LoginActivity suitable for Google Picasa Authentication step.
 
+  Sample code for `FlickrActionManager`:
+```java
+public class FlickrActionManager implements IActionManager {
+
+    @Override
+    public IAction getAction(String action) {
+        switch (action) {
+            case Flickr.UPLOADING_ACTION:
+            return new FlickrUploaderAction();
+            case Flickr.VIEWER_ACTION:
+                return new FlickrViewerAction();
+            case Flickr.UPLOADED_ACTION:
+                return new FlickrUploadedAction();
+        }
+        return null;
+    }
+}
+```
 
 ## API Detail
  Here is some list APIs for implementing Picassa upload function:
@@ -101,7 +121,7 @@ for(PhotoEntry photo : feed.getPhotoEntries()) {
 }
  ```
 
-Base on above assumptions, this application needs from 3-4 days for extending Picasa uploading function including intergration testing time.
+Base on above assumptions, this application needs from **3-4** days for extending Picasa uploading function including intergration testing time.
 
 # Testing
 Testing project is stored under `src/test`. I create two sample test screen : `SettingActivity` and `ImageListActivity`. Using two main libraries:
