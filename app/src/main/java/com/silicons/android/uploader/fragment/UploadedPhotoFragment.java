@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,11 +13,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.silicons.android.uploader.R;
+import com.silicons.android.uploader.action.uploaded.UploadedAction;
 import com.silicons.android.uploader.activity.ImageListActivity;
 import com.silicons.android.uploader.activity.PhotoViewerActivity;
 import com.silicons.android.uploader.adapter.UploadedPhotoAdapter;
+import com.silicons.android.uploader.config.ActionConstant;
+import com.silicons.android.uploader.config.UploaderApplication;
 import com.silicons.android.uploader.dal.PhotoItemDAL;
 import com.silicons.android.uploader.model.UploadedPhotoNotify;
 import com.silicons.android.uploader.model.PhotoItem;
@@ -33,8 +39,9 @@ public class UploadedPhotoFragment extends Fragment implements UploadedPhotoAdap
 
     private List<PhotoItem> mPhotos;
 
-
     private EventBus mBus = EventBus.getDefault();
+
+    private UploadedAction mAction;
 
     public UploadedPhotoFragment() {
         // Required empty public constructor
@@ -56,6 +63,10 @@ public class UploadedPhotoFragment extends Fragment implements UploadedPhotoAdap
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_uploaded_photo, container, false);
         mActivity.setTitle("Uploaded photos");
+
+        mAction = (UploadedAction) UploaderApplication.getActionManager()
+                .getAction(ActionConstant.Flickr.UPLOADED_ACTION);
+        mAction.setFragment(this);
 
         mPhotoRecycleView = (RecyclerView) view.findViewById(R.id.uploaded_recycle_view);
         mPhotoRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -121,6 +132,11 @@ public class UploadedPhotoFragment extends Fragment implements UploadedPhotoAdap
         Intent intent = new Intent(mActivity, PhotoViewerActivity.class);
         intent.putExtra("photo_id", photo.getFlickrId());
         startActivity(intent);
+    }
+
+    @Override
+    public AsyncTask<Void, Void, Bitmap> getTask(ImageView imageView, String photoId) {
+        return mAction.getTask(mActivity, imageView, photoId);
     }
 
     public interface OnFragmentInteractionListener {

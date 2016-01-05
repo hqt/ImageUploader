@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.widget.ImageView;
 
 import com.silicons.android.uploader.task.flickr.FlickrImageDownloadTask;
@@ -16,7 +17,7 @@ public class ImageUtils {
 
 
     public static boolean isNewImage(String taskId, ImageView imageView) {
-        final FlickrImageDownloadTask bitmapWorkerTask = getPhotoDownloadTask(imageView);
+        final FlickrImageDownloadTask bitmapWorkerTask = (FlickrImageDownloadTask) getPhotoDownloadTask(imageView);
 
         if (bitmapWorkerTask != null) {
             final String currentImageViewTaskId = bitmapWorkerTask.getTaskId();
@@ -40,7 +41,7 @@ public class ImageUtils {
     /**
      * Get Current task working on this image view
      */
-    public static FlickrImageDownloadTask getPhotoDownloadTask(ImageView imageView) {
+    public static AsyncTask getPhotoDownloadTask(ImageView imageView) {
         if (imageView != null) {
             final Drawable drawable = imageView.getDrawable();
             if (drawable instanceof AsyncDrawable) {

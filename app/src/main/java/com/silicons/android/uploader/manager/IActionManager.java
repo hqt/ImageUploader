@@ -1,4 +1,4 @@
-package com.silicons.android.uploader.manager.action;
+package com.silicons.android.uploader.manager;
 
 import com.silicons.android.uploader.action.IAction;
 

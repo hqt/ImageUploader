@@ -186,7 +186,8 @@ public class FlickrImageDownloadTask extends AsyncTask<Void, Void, Bitmap> {
 
             // in multi-mode. maybe there are many asynctask run parallel
             // get the latest task of this image view for checking
-            FlickrImageDownloadTask imageDownloadTask = ImageUtils.getPhotoDownloadTask(imageView);
+            FlickrImageDownloadTask imageDownloadTask = (FlickrImageDownloadTask)
+                    ImageUtils.getPhotoDownloadTask(imageView);
             if ((this == imageDownloadTask) && (imageView != null)) {
                 imageView.setImageBitmap(result);
             }

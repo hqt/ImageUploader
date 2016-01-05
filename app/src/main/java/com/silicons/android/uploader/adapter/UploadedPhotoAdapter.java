@@ -3,6 +3,7 @@ package com.silicons.android.uploader.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -99,6 +100,7 @@ public class UploadedPhotoAdapter extends RecyclerView.Adapter<UploadedPhotoAdap
         // else. try to download new image
         // by creating new task for this image view
         Log.e(TAG, photo.getFlickrTitle() + " need to download");
+        // AsyncTask task = mListener.getTask(holder.mImageView, photo.getFlickrId());
         FlickrImageDownloadTask task = new FlickrImageDownloadTask(mContext, holder.mImageView,
                 photo.getFlickrId(), AppConstant.PhotoType.PHOTO_ID_SMALL, false);
         AsyncDrawable asyncDrawable = new AsyncDrawable(mContext.getResources(), mPlaceHolderBitmap, task);
@@ -148,5 +150,6 @@ public class UploadedPhotoAdapter extends RecyclerView.Adapter<UploadedPhotoAdap
 
     public static interface IUploadedPhotoItemListener {
         public void onClick(int position);
+        public AsyncTask<Void, Void, Bitmap> getTask(ImageView imageView, String photoId);
     }
 }
